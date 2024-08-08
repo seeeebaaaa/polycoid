@@ -1,0 +1,15 @@
+# ssh keys:
+polycoid/.secret
+
+# cloud config
+config/cloud_init.yaml
+
+# deploy script
+deploy.sh
+
+# python related
+**/__pycache__/
+.venv/
+
+# MacOS SpotlightFiles
+**/.DS_Store

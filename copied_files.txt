@@ -1,0 +1,5 @@
+polycoid/.secret/
+polycoid/manage.py
+polycoid/polycoid_main/
+polycoid/requirements.txt
+polycoid/static/
