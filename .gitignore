@@ -13,3 +13,6 @@ deploy.sh
 
 # MacOS SpotlightFiles
 **/.DS_Store
+
+# Enviroment
+.env

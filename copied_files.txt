@@ -1,5 +1,4 @@
-polycoid/.secret/
-polycoid/manage.py
 polycoid/polycoid_main/
-polycoid/requirements.txt
 polycoid/static/
+polycoid/filmliste/
+polycoid/requirements.txt
