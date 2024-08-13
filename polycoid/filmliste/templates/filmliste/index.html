@@ -1,0 +1,6 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'filmliste/style.css' %}">
+
+<h1>{{ randomNumber }}</h1>
+<a href="{% url 'filmliste:index' %}">Reload to index</a>

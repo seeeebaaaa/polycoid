@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-# Create your views here.
+import random
 
 
 def index(request):
-  return HttpResponse("filmlisten index")
+  context = {"randomNumber":random.randint(0,100)}
+  return render(request, "filmliste/index.html", context)
