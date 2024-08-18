@@ -1,6 +1,63 @@
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'filmliste/style.css' %}">
-
-<h1>{{ randomNumber }}</h1>
-<a href="{% url 'filmliste:index' %}">Reload to index</a>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'filmliste/style.css' %}" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="main">
+      <div class="nav">
+        <div class="home">Home</div>
+        <div class="search">Search</div>
+        <div class="profile">Acc</div>
+      </div>
+      <div class="front">
+        <div class="bg"></div>
+        <div class="content">
+          <!-- Pirates of the Caribbean 1
+          *pic*
+          Anfangen/Beenden
+          Restliche serie... -->
+          <div class="info">
+            <div class="title">
+              <div class="title">Pirates of the Caribbean 1</div>
+              <div class="sub">lol</div>
+            </div>
+            <div class="action">
+              <div class="button">Anfangen</div>
+            </div>
+            <div class="further">
+              <div class="title">Pirates of the Caribbean</div>
+              <div class="entries">
+                <div class="entry">
+                  <img src="{% static 'filmliste/images/potc.jpg' %}" alt="">
+                  <div class="title"></div>
+                </div>
+                <div class="entry">
+                  <img src="{% static 'filmliste/images/potc_2.jpg' %}" alt="">
+                  <div class="title"></div>
+                </div>
+                <div class="entry">
+                  <img src="{% static 'filmliste/images/potc_3.jpg' %}" alt="">
+                  <div class="title"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="pic">
+            <img src="{% static 'filmliste/images/potc.jpg' %}" alt />
+          </div>
+        </div>
+      </div>
+      <div class="started">s</div>
+      <div class="future">fut</div>
+      <div class="done">don</div>
+    </div>
+    <!-- <h1>{{ randomNumber }}</h1>
+    <a href="{% url 'filmliste:index' %}">Reload to index</a> -->
+  </body>
+</html>
