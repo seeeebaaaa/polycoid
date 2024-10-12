@@ -1,4 +1,0 @@
-polycoid/polycoid_main/
-polycoid/static/
-polycoid/filmliste/
-polycoid/requirements.txt
