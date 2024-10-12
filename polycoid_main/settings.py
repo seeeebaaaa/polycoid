@@ -31,7 +31,9 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['polycoid.com',env('SERVER_IP'),'localhost']
+ALLOWED_HOSTS = ['www.polycoid.com','polycoid.com',env('SERVER_IP')]
+if DEBUG:
+  ALLOWED_HOSTS.append('localhost')
 
 
 # Application definition
