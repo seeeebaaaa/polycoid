@@ -10,7 +10,8 @@ eval "$(ssh-agent -s)"  # Start the SSH agent
 ssh-add ~/.ssh/github   
 
 # Pull the latest changes from GitHub
-git pull origin main
+git fetch origin
+git reset --hard origin/main
 
 # Install dependencies
 pip install -r requirements.txt
