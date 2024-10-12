@@ -6,6 +6,9 @@ source /var/www/polycoid/.venv/bin/activate
 # Navigate to the project directory
 cd /var/www/polycoid
 
+eval "$(ssh-agent -s)"  # Start the SSH agent
+ssh-add ~/.ssh/github   
+
 # Pull the latest changes from GitHub
 git pull origin main
 
