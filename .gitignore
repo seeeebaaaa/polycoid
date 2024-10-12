@@ -4,9 +4,6 @@
 # cloud config
 config/cloud_init.yaml
 
-# deploy script
-deploy.sh
-
 # python related
 **/__pycache__/
 .venv/
