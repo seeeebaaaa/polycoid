@@ -22,5 +22,5 @@ jobs:
         port: 22
         script: |
           cd /var/www/polycoid
-          echo '${{ secrets.ENV }}' > .env
+          echo -e '${{ secrets.ENV }}' > .env
           ./deploy.sh
