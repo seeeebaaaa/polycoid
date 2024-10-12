@@ -1,5 +1,5 @@
 asgiref
-Django==5.0.7
+Django==5.0.9
 gunicorn==22.0.0
 packaging==24.1
 psycopg2-binary==2.9.9
