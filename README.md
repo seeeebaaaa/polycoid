@@ -2,6 +2,8 @@
 
 the lovely polycoid
 
+:D
+
 ## Sites
-Home: -
+Home: -x
 Filmliste: [FILMLISTE.md](./FILMLISTE.md)
