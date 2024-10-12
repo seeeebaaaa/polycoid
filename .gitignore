@@ -1,5 +1,5 @@
 # ssh keys:
-polycoid/.secret
+.secret
 
 # cloud config
 config/cloud_init.yaml
