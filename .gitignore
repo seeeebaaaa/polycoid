@@ -13,3 +13,6 @@ config/cloud_init.yaml
 
 # Enviroment
 .env
+
+# add static file sform collect to ignore
+static/
