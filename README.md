@@ -2,7 +2,7 @@
 
 the lovely polycoid
 
-:D
+:D :P
 
 ## Sites
 Home: -x
