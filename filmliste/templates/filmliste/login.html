@@ -6,10 +6,24 @@
   <title>Filmliste - Login</title>
 </head>
 <body>
-  Login or register
+  {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+  Login
   <form action="/filmliste/login/" method="post">
     {% csrf_token %}
-    {{ form }}
+    {{ login.as_p }}
+    <input type="submit" value="Ok">
+  </form>
+  <br>
+  Register/Signup
+  <form action="/filmliste/login/" method="post">
+    {% csrf_token %}
+    {{ signup.as_p }}
     <input type="submit" value="Ok">
   </form>
 </body>

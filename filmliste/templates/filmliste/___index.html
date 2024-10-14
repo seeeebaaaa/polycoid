@@ -19,6 +19,11 @@
     <title>Document</title>
   </head>
   <body>
+    {% if user.is_authenticated %}
+    YOURE LOGGED IN
+    {% else %}
+    not logoed in :(
+    {% endif %}
     <div class="main">
       <div class="nav">
         <div class="home"><a href="#" tabindex="0">Filmliste</a></div>
