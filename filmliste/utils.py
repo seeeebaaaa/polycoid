@@ -6,6 +6,8 @@ from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
+from PIL import Image
+
 
 # Function to send email verification
 def send_verification_email(request, user):
@@ -31,3 +33,12 @@ def send_verification_email(request, user):
     mail.attach_alternative(message,"text/html")
 
     mail.send(fail_silently=False)
+
+
+def resize_image(image_path, size=(512, 512)):
+    """Resizes an image to the specified size."""
+    img = Image.open(image_path)
+    img = img.convert("RGB")  # Ensures consistent image format
+    img.thumbnail(size)  # Resize the image, keeping aspect ratio
+    img.save(image_path)  # Overwrite the original file
+

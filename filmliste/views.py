@@ -8,12 +8,13 @@ from django.utils.encoding import force_str
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
 from .utils import send_verification_email
+from django.contrib.auth.decorators import login_required
+from .forms import ProfilePictureForm
 
 User = get_user_model()
 
-# def index(request):
-#     context = {"randomNumber": random.randint(0, 100)}
-#     return render(request, "filmliste/index.html", context)
+def dev(request):
+    return render(request, "filmliste/___index.html")
 
 def list_overview(request):
     return render(request,"filmliste/list_overview.html")
@@ -88,3 +89,16 @@ def logout_view(request):
 
 def list_detail(request, list_id):
     return render(request,"filmliste/list_details.html",{"list_id":list_id})
+
+
+@login_required
+def upload_profile_picture(request):
+    if request.method == 'POST':
+        form = ProfilePictureForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('filmliste:index')  # Redirect to the user's profile page
+    else:
+        form = ProfilePictureForm(instance=request.user)
+
+    return render(request, 'filmliste/upload.html', {'form': form})

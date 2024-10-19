@@ -5,7 +5,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{% static 'filmliste/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'filmliste/styles/style.css' %}" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,11 +19,6 @@
     <title>Document</title>
   </head>
   <body>
-    {% if user.is_authenticated %}
-    YOURE LOGGED IN
-    {% else %}
-    not logoed in :(
-    {% endif %}
     <div class="main">
       <div class="nav">
         <div class="home"><a href="#" tabindex="0">Filmliste</a></div>

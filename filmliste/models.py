@@ -7,6 +7,9 @@ from django.contrib import auth
 from django.utils.translation import gettext_lazy as _
 from django.apps import apps
 from django.contrib.auth.hashers import make_password
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from .utils import resize_image
 
 class CustomUserManager(BaseUserManager):
     use_in_migrations = True
@@ -121,6 +124,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
 
+    profile_picture = models.ImageField(
+        upload_to='filmliste/profile_pictures/',
+        blank=True,
+        null=True,
+        help_text=_("Upload a profile picture.")
+    )
+
     objects = CustomUserManager()
 
     EMAIL_FIELD = "email"
@@ -134,3 +144,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def clean(self):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.profile_picture:
+            resize_image(self.profile_picture.path)
+
+@receiver(post_save, sender=CustomUser)
+def resize_profile_picture(sender, instance, **kwargs):
+    """Signal to resize the profile picture after the user object is saved."""
+    if instance.profile_picture:
+        resize_image(instance.profile_picture.path)
