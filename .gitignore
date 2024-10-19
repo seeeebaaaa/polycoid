@@ -15,4 +15,5 @@ config/cloud_init.yaml
 .env
 
 # add static file sform collect to ignore
-static/
+./static
+./media
