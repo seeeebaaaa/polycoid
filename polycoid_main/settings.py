@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'filmliste.apps.FilmlisteConfig',
-    'rest_framework'
+    'rest_framework',
+    'dj_svg', # adds inline svg template support
 ]
 
 MIDDLEWARE = [
