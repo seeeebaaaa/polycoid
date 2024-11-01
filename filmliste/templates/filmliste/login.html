@@ -14,14 +14,14 @@
         </ul>
     {% endif %}
   Login
-  <form action="/filmliste/login/" method="post">
+  <form action="{% url 'filmliste:login' %}" method="post">
     {% csrf_token %}
     {{ login.as_p }}
     <input type="submit" value="Ok">
   </form>
   <br>
   Register/Signup
-  <form action="/filmliste/login/" method="post">
+  <form action="{% url 'filmliste:login' %}" method="post">
     {% csrf_token %}
     {{ signup.as_p }}
     <input type="submit" value="Ok">

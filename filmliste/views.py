@@ -1,5 +1,5 @@
 import random
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import LoginForm, SignupForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -10,6 +10,7 @@ from django.contrib.auth import get_user_model
 from .utils import send_verification_email
 from django.contrib.auth.decorators import login_required
 from .forms import ProfilePictureForm
+from .models import List
 
 User = get_user_model()
 
@@ -17,7 +18,13 @@ def dev(request):
     return render(request, "filmliste/___index.html")
 
 def list_overview(request):
-    return render(request,"filmliste/list_overview.html")
+    if request.user.is_authenticated:
+        print("sth")
+        lists = List.objects.filter(created_by=request.user)
+        print(lists)
+    else:
+        lists = None
+    return render(request,"filmliste/list_overview.html",{"lists":lists})
 
 # the view to handle login & register
 def login_view(request):
@@ -60,6 +67,7 @@ def login_view(request):
                 messages.error(
                     request, "Invalid Form Input. Did you enter your password correctly?")
 
+    
     # always return normal page if sth went wrong or normal get access was required
     return render(request, "filmliste/login.html", {"login": LoginForm(), "signup": SignupForm()})
 
@@ -88,7 +96,8 @@ def logout_view(request):
 
 
 def list_detail(request, list_id):
-    return render(request,"filmliste/list_details.html",{"list_id":list_id})
+    list = get_object_or_404(List,id=list_id)
+    return render(request,"filmliste/list_details.html",{"list":list})
 
 
 @login_required
@@ -101,4 +110,4 @@ def upload_profile_picture(request):
     else:
         form = ProfilePictureForm(instance=request.user)
 
-    return render(request, 'filmliste/upload.html', {'form': form})
+    return render(request, 'upload.html', {'form': form})

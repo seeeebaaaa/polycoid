@@ -6,50 +6,8 @@
     <title>List-Details</title>
 </head>
 <body>
-    Details zu liste {{ list_id }}login.
-
-    Test button:
-    <button id="myButton">Press Me</button>
-    <p id="responseMessage"></p>
-    
-    <script>
-        document.getElementById("myButton").addEventListener("click",async _=>{
-            const button = document.getElementById('myButton');
-            const responseMessage = document.getElementById('responseMessage');
-
-            // Show loading spinner and disable the button while waiting for the response
-            button.disabled = true;
-            const originalText = button.innerText;
-            button.innerHTML = `<span class="spinner">⏳</span> Loading...`;
-
-            try {
-                // Make the async POST request
-                const response = await fetch("{% url 'filmliste:button' %}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}'  // CSRF token for Django POST requests
-                    },
-                    body: JSON.stringify({"message":"yay"})
-                });
-
-                // Convert the response to JSON
-                const data = await response.json();
-
-                // Display the message received from the server
-                responseMessage.innerText = data.message;
-
-            } catch (error) {
-                // Display error message if something goes wrong
-                responseMessage.innerText = "Error: " + error.message;
-                console.error('Error:', error);
-
-            } finally {
-                // Restore button state (text and enabled status)
-                button.innerText = originalText;
-                button.disabled = false;
-            }
-        })    
-    </script>
+    Details zu liste {{list.title}} <br>
+    Was created by {{list.created_by}} <br>
+    Has users: {{list.users}}
 </body>
 </html>

@@ -155,3 +155,21 @@ def resize_profile_picture(sender, instance, **kwargs):
     """Signal to resize the profile picture after the user object is saved."""
     if instance.profile_picture:
         resize_image(instance.profile_picture.path)
+
+
+# List model
+
+class List(models.Model):
+    title = models.CharField(max_length=30)
+    created_by = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name="own_lists",
+        null=False,
+        blank=False
+    )
+    users = models.ManyToManyField(
+        CustomUser,
+        related_name='shared_lists',
+        blank=True
+    )

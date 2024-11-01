@@ -9,16 +9,26 @@
       href="{% static 'filmliste/styles/list_overview.css' %}"
     />
     <script src="{% static 'filmliste/scripts/thirdparty/jquery-3.7.1.min.js' %}"></script>
-
+    <script src="{% static 'filmliste/scripts/thirdparty/jquery-ui.min.js' %}"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="{% static 'filmliste/scripts/thirdparty/jquery-ui.min.css' %}"/>
     <link
       href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
       rel="stylesheet"
     />
-
+    <script>
+      const CSRF_TOKEN = '{{ csrf_token }}';
+      const FILMLISTE = { addlist: "{% url 'filmliste:add-list' %}" };
+    </script>
     <!-- Icons from https://iconoir.com -->
+    <script src="{% static 'filmliste/scripts/utils.js' %}" defer></script>
     <script src="{% static 'filmliste/scripts/ui.js' %}" defer></script>
+    <script
+      src="{% static 'filmliste/scripts/ui_function.js' %}"
+      defer
+    ></script>
     <title>Document</title>
   </head>
   <body>
@@ -34,13 +44,13 @@
       <div class="nav">
         <div class="home"><a href="#promote" tabindex="0">Filmliste</a></div>
         <div class="my-lists nav-item">
-          <a href="#my-lists" tabindex="1" class="active">My Lists</a>
+          <a href="#my-lists" tabindex="0" class="active">My Lists</a>
         </div>
         <div class="browse-lists nav-item">
-          <a href="#browse-lists" tabindex="1">Browse Lists</a>
+          <a href="#browse-lists" tabindex="0">Browse Lists</a>
         </div>
         <div class="all-titles nav-item">
-          <a href="#my-titles" tabindex="1">My Titles</a>
+          <a href="#my-titles" tabindex="0">My Titles</a>
         </div>
         <div class="profile">
           <div class="symbol">
@@ -76,8 +86,8 @@
           <h1>My Lists</h1>
           <div class="add-list">
             <div class="symbol">
-              <button>
-                {% svg "filmliste/playlist-plus" class="add-list" %}
+              <button class="add-new-list">
+                {% svg "filmliste/playlist-plus" %}
               </button>
             </div>
           </div>
@@ -93,13 +103,31 @@
                   type="text"
                   name="tobechangedfromdjango"
                   id="my-lists-search"
+                  placeholder="Enter list name"
+                  tabindex="-1"
                 />
-                {% svg "filmliste/xmark" class="close-list" %}
+                <button tabindex="-1">{% svg "filmliste/xmark" class="close-list" %}</button>
               </div>
             </div>
           </div>
         </div>
         <div class="container">
+          {% if user.is_authenticated %} {% endif %} {% if lists %}
+          <div class="card-container">
+            {% for list in lists %}
+            <a href="{% url 'filmliste:list-details' list.id %}" tabindex="0">
+              <div class="title-card">
+                <div class="text">
+                  {{ list.title }}
+                </div>
+                <div class="text-mirror">
+                  {{ list.title }}
+                </div>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+          {% else %}
           <div class="none">
             <div class="pic">
               {% svg 'filmliste/server' class="list-symbol" %}
@@ -109,16 +137,29 @@
               <p>Start a new list or browse other lists.</p>
             </div>
           </div>
+          {% endif %}
         </div>
       </div>
       <div class="browse-lists box" id="browse-lists">
         <div class="head">
           <h1>Browse Lists</h1>
           <div class="search">
-            <div class="symbol">
-              <button>
-                {% svg "filmliste/input-search" class="search-list" %}
-              </button>
+            <div class="search-container">
+              <div class="symbol">
+                <button>
+                  {% svg "filmliste/input-search" class="search-list" %}
+                </button>
+              </div>
+              <div class="search-box">
+                <input
+                  type="text"
+                  name="tobechangedfromdjango"
+                  id="browse-lists-search"
+                  placeholder="Enter list name"
+                  tabindex="-1"
+                />
+                <button tabindex="-1">{% svg "filmliste/xmark" class="close-list" %}</button>
+              </div>
             </div>
           </div>
         </div>
@@ -137,18 +178,30 @@
       <div class="my-titles box" id="my-titles">
         <div class="head">
           <h1>My Titles</h1>
-          <div class="add-list">
+          <!-- <div class="add-list">
             <div class="symbol">
               <button>
                 {% svg "filmliste/playlist-plus" class="add-list" %}
               </button>
             </div>
-          </div>
+          </div> -->
           <div class="search">
-            <div class="symbol">
-              <button>
-                {% svg "filmliste/input-search" class="search-list" %}
-              </button>
+            <div class="search-container">
+              <div class="symbol">
+                <button>
+                  {% svg "filmliste/input-search" class="search-list" %}
+                </button>
+              </div>
+              <div class="search-box">
+                <input
+                  type="text"
+                  name="tobechangedfromdjango"
+                  id="my-titles-search"
+                  placeholder="Enter title name"
+                  tabindex="-1"
+                />
+                <button tabindex="-1">{% svg "filmliste/xmark" class="close-list" %}</button>
+              </div>
             </div>
           </div>
         </div>
@@ -210,5 +263,41 @@
         </div>
       </div>
     </div>
+    <div class="modal" style="display: none">
+      <h1>New List</h1>
+      <div class="flow">
+        whoooowowowowoow
+        <br />
+        lahfkhakf
+        <br />
+        kjshfkhsf
+        <br />
+        slfhsjhfl
+        <br />
+        uwu
+      </div>
+    </div>
+
+    <div class="popup new-list hidden">
+      <div class="title-card">
+        <div class="text"></div>
+        <div class="text-mirror"></div>
+      </div>
+      <div class="background">
+        <button class="close popup-close">{% svg "filmliste/xmark"%}</button>
+        <button class="refresh-color">{% svg "filmliste/refresh-double"%}</button>
+        <input
+          type="text"
+          name="list-name"
+          id="create-list-name"
+          placeholder="Enter new list name"
+          maxlength="30"
+        />
+        <label for="list-name"
+          ><button class="create">Create List</button>
+        </label>
+      </div>
+    </div>
+    <div class="bg-shadow hidden"></div>
   </body>
 </html>
