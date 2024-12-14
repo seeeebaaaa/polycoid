@@ -88,7 +88,6 @@ $(document).ready(_ => {
   $('.title-card').trigger('font-change', 1000)
   // add function that sets gradient form colors
   $('.title-card').on('set-background', (event, args) => {
-    console.log($(event.currentTarget).data("colors"))
     if ($(event.currentTarget).data("colors"))
       colors = $(event.currentTarget).data("colors")
     else if (args)
@@ -136,7 +135,7 @@ $(document).ready(_ => {
     $(event.currentTarget)
       .closest('.new-list')
       .find('.title-card .text, .title-card .text-mirror')
-      .html($(event.currentTarget).val())
+      .text($(event.currentTarget).val())
       .trigger('font-change')
   })
 

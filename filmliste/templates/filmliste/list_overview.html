@@ -54,6 +54,7 @@
         </div>
         <div class="profile">
           <div class="symbol">
+            <button>
             <!-- icons: https://iconoir.com -->
             <?xml version="1.0" encoding="UTF-8"?><svg
               stroke-width="1.5"
@@ -77,6 +78,7 @@
                 stroke-linejoin="round"
               ></path>
             </svg>
+          </button>
           </div>
         </div>
       </div>
@@ -118,10 +120,10 @@
             <a href="{% url 'filmliste:list-details' list.id %}" tabindex="0">
               <div class="title-card" data-colors="{{ list|colorsJSON|escape }}">
                 <div class="text">
-                  {{ list.title }}
+                  {{ list.title|escape }}
                 </div>
                 <div class="text-mirror">
-                  {{ list.title }}
+                  {{ list.title|escape }}
                 </div>
               </div>
             </a>

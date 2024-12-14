@@ -163,15 +163,15 @@ input[type='text'] {
   cursor: pointer;
 }
 
-.nav > .profile:hover > .symbol > svg path {
+.nav > .profile:hover > .symbol > button > svg path {
   stroke: var(--c-txt-scnd);
 }
 
-.nav > .profile > .symbol > svg {
+.nav > .profile > .symbol > button > svg {
   height: 2.3em;
 }
 
-.nav > .profile > .symbol > svg path {
+.nav > .profile > .symbol > button > svg path {
   stroke: var(--c-txt);
   stroke-width: var(--symbol-width);
 }

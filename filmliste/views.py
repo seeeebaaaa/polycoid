@@ -28,7 +28,7 @@ def list_overview(request):
 
 # the view to handle login & register
 def login_view(request):
-    # if used to send content
+    # if used to login or register
     if request.method == "POST":
         # technically not needed, as the existence of an email or pw2 field indicates its a register attepmt
         if request.POST.get("type") == "login":
