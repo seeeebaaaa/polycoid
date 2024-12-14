@@ -7,9 +7,11 @@ class ListSerializer(serializers.ModelSerializer):
     users = serializers.PrimaryKeyRelatedField(
         many=True, queryset=CustomUser.objects.all(), required=False, default=[]
         )
+    
+
     class Meta:
         model = List
-        fields = ['title', 'created_by', 'users']
+        fields = ['title', 'created_by', 'users', 'colors']
     
     def validate_title(self, value):
         forbidden_words = ["forbidden", "banned"]

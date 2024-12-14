@@ -45,7 +45,7 @@ function hsvToRgb(h, s, v) {
   };
 }
 
-function generateHSVGoldenColors(n, s, v) {
+function generateHSVGoldenColors(n, s=-1, v=-1) {
   golden_ratio_conjugate = 0.618033988749895
   colors = []
   h = Math.random()
@@ -53,7 +53,20 @@ function generateHSVGoldenColors(n, s, v) {
   for (i of [...Array(n).keys()]) {
     h += golden_ratio_conjugate
     h %= 1
-    colors.append({"x":Math.random(), "y":Math.random(), "h": h, "s": s, "v": v })
+    
+    colors.push({"x":randomMargin(.5,.6), "y":randomMargin(.5,.6), "h": h*360, "s": s<0?randomMargin(.8,.2):s, "v": v<0?randomMargin(.6,.15):v })
   }
+  console.log(colors);
+  
   return colors
 }
+
+function randomMargin(x, n) {
+  const min = x - n;
+  const max = x + n;
+  return Math.random() * (max - min) + min;
+}
+
+// Example usage:
+const randomValue = randomMargin(50, 10);
+console.log(randomValue); // Random value between 40 and 60

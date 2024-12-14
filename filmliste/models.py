@@ -1,4 +1,5 @@
 # models.py
+from typing import Iterable
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.contrib.auth.validators import UnicodeUsernameValidator
@@ -10,6 +11,8 @@ from django.contrib.auth.hashers import make_password
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from .utils import resize_image
+from django.core.exceptions import ValidationError
+
 
 class CustomUserManager(BaseUserManager):
     use_in_migrations = True
@@ -79,6 +82,7 @@ class CustomUserManager(BaseUserManager):
     #         )
     #     return self.none()
 
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
     An abstract base class implementing a fully featured User model with
@@ -105,7 +109,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
-        help_text=_("Designates whether the user can log into this admin site."),
+        help_text=_(
+            "Designates whether the user can log into this admin site."),
     )
     is_active = models.BooleanField(
         _("active"),
@@ -134,7 +139,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     EMAIL_FIELD = "email"
-    USERNAME_FIELD = "username" # this makes their username their primary identifier
+    USERNAME_FIELD = "username"  # this makes their username their primary identifier
     REQUIRED_FIELDS = ["email"]
 
     class Meta:
@@ -149,6 +154,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         super().save(*args, **kwargs)
         if self.profile_picture:
             resize_image(self.profile_picture.path)
+
 
 @receiver(post_save, sender=CustomUser)
 def resize_profile_picture(sender, instance, **kwargs):
@@ -173,3 +179,21 @@ class List(models.Model):
         related_name='shared_lists',
         blank=True
     )
+    
+    # Save titlecard colors + position to recreate radial gradient combo
+    colors = models.JSONField(default=list, blank=True)
+    def clean_colors(self):
+        if not isinstance(self.colors, list) or len(self.colors) < 2:
+            raise ValidationError("The Color field must contain at least two dictionaries.")
+
+        for entry in self.colors:
+            if not isinstance(entry, dict):
+                raise ValidationError("Each item in Color must be a dictionary.")
+            
+            for key, value in entry.items():
+                if not isinstance(value, (int, float)):
+                    raise ValidationError(f"Value for '{key}' must be an integer or float.")
+
+    def save(self, **kwargs):
+        self.clean_colors()
+        return super().save(**kwargs)

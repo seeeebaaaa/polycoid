@@ -7,6 +7,9 @@
 Number.prototype.clamp = function (min, max) {
   return Math.min(Math.max(this, min), max)
 }
+Number.prototype.round = function (decimals) {
+  return Math.round(this * 10 ** decimals) / 10 ** decimals
+}
 
 $(document).ready(_ => {
   /**
@@ -84,7 +87,15 @@ $(document).ready(_ => {
   // trigger font change once after load
   $('.title-card').trigger('font-change', 1000)
   // add function that sets gradient form colors
-  $('.title-card').on('set-background', (event, colors) => {
+  $('.title-card').on('set-background', (event, args) => {
+    console.log($(event.currentTarget).data("colors"))
+    if ($(event.currentTarget).data("colors"))
+      colors = $(event.currentTarget).data("colors")
+    else if (args)
+      colors = args.colors
+    else
+      return
+    
     const title_card = $(event.currentTarget)
     // use first color to set background color
     title_card.css(
@@ -92,16 +103,20 @@ $(document).ready(_ => {
       `hsla(${colors[0].h}, ${colors[0].s * 100}%, ${colors[0].v * 100}%, 1)`
     )
     colors = colors.slice(1)
-    const gradient = ''
+    let gradient = ''
     for (color of colors) {
-      gradient += `radial-gradient(at ${color.x * 100}% ${
+      gradient += `radial-gradient(at ${(color.x * 100).round(2)}% ${(
         color.y * 100
-      }%, hsla(${color.h}, ${color.s * 100}%, ${
+      ).round(2)}%, hsla(${color.h}, ${color.s * 100}%, ${
         color.v * 100
       }%, 1) 0px, transparent 50%),`
     }
+
     title_card.css('background-image', gradient.slice(0, -1))
   })
+  // set fonts from memory on load
+  $('.title-card').trigger("set-background", null)
+
 
   /*\
    * ===============
@@ -112,6 +127,7 @@ $(document).ready(_ => {
   $('.add-new-list').on('click', event => {
     $('.popup.new-list').removeClass('hidden')
     $('body>.bg-shadow').removeClass('hidden')
+    $('.popup.new-list .refresh-color').trigger('click')
   })
 
   // mirror input + font change
@@ -122,6 +138,27 @@ $(document).ready(_ => {
       .find('.title-card .text, .title-card .text-mirror')
       .html($(event.currentTarget).val())
       .trigger('font-change')
+  })
+
+  // refresh titlecard color
+  $('.popup.new-list .refresh-color').on('click', event => {
+    // generate random colors
+    const colors = generateHSVGoldenColors(7)
+    // set colorsp
+    $(event.currentTarget)
+    .closest('.popup')
+    .find('.title-card')
+    .data('colors', colors)
+    .trigger('set-background', { colors: colors })
+    $({deg:0}).animate(
+        {
+          deg: 360,
+        },
+      {
+        duration: 750, queue: true, easing: 'easeOutCubic', step: now => {
+          $(event.currentTarget).find("svg").css("transform","rotate("+now+"deg)")
+        }}
+      )
   })
 
   /*\

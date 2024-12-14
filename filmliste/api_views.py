@@ -13,11 +13,11 @@ def button_test_press(request):
 
 
 
-@api_view(["POSt"])
+@api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def add_list(request):
     serializer = ListSerializer(data=request.data)
     if serializer.is_valid():
-        title = serializer.save(created_by=request.user)
+        list = serializer.save(created_by=request.user)
         return redirect("filmliste:index")
     return Response(serializer.errors, status=400)

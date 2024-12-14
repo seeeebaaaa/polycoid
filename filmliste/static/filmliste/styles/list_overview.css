@@ -178,9 +178,9 @@ input[type='text'] {
 
 /*
  *
- *  ======
- *  CONTENT
- *  ======
+ *  ===========
+ *  BOX CONTENT
+ *  ===========
  *
  */
 
@@ -328,6 +328,12 @@ input[type='text'] {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  max-width: 20em;
+  margin-top: 0.5em;
+}
+
+.box .container .none .txt p {
+  text-align: center;
 }
 
 /*\
@@ -341,6 +347,9 @@ input[type='text'] {
   color: var(--c-txt);
   z-index: 0;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /*\
@@ -373,15 +382,15 @@ input[type='text'] {
   background-color: hsla(0, 100%, 50%, 1);
   background-image: radial-gradient(
       at 40% 20%,
-      hsla(28, 100%, 74%, 1) 0px,
+      rgb(255, 184, 122) 0px,
       transparent 50%
     ),
-    radial-gradient(at 80% 0%, hsla(189, 100%, 56%, 1) 0px, transparent 50%),
-    radial-gradient(at 0% 50%, hsla(355, 100%, 93%, 1) 0px, transparent 50%),
-    radial-gradient(at 80% 50%, hsla(340, 100%, 76%, 1) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, hsla(22, 100%, 77%, 1) 0px, transparent 50%),
-    radial-gradient(at 80% 100%, hsla(242, 100%, 70%, 1) 0px, transparent 50%),
-    radial-gradient(at 0% 0%, hsla(343, 100%, 76%, 1) 0px, transparent 50%);
+    radial-gradient(at 80% 0%, rgb(31, 221, 255) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, rgb(255, 219, 222) 0px, transparent 50%),
+    radial-gradient(at 80% 50%, rgb(255, 133, 173) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgb(255, 181, 138) 0px, transparent 50%),
+    radial-gradient(at 80% 100%, rgb(107, 102, 255) 0px, transparent 50%),
+    radial-gradient(at 0% 0%, rgb(255, 133, 167) 0px, transparent 50%);
   z-index: 100;
   border-radius: var(--b-corner);
   overflow: hidden;
@@ -389,6 +398,9 @@ input[type='text'] {
   flex-direction: column;
   justify-content: flex-end;
   position: relative;
+}
+.my-lists.box .title-card:hover{
+  filter:brightness(71.26%); /* rate of brightness reduction between --c-txt and --c-txt-scnd*/
 }
 
 .my-lists.box .title-card .text,
@@ -399,7 +411,7 @@ input[type='text'] {
   /* line-height: 0.9em; */
   max-width: 100%;
   max-height: 100%;
-  font-size: .3em;
+  font-size: 0.3em;
   font-weight: bolder;
   word-wrap: break-word;
   word-break: normal;
@@ -596,6 +608,7 @@ body .bg-shadow {
   top: 50%;
   transform: translate(-50%, -75%);
   background-color: #f6b26b;
+  color: var(--c-txt);
   z-index: 100;
   border-radius: var(--b-corner);
   overflow: hidden;
@@ -643,17 +656,32 @@ body .bg-shadow {
   right: 0.5em;
   z-index: 100;
 }
+
+.popup.new-list .background .refresh-color {
+  position: absolute;
+  top: 0.8em;
+  left: .9em;
+  z-index: 100;
+}
+
 .popup.new-list .background .close svg {
   height: 2em;
   width: auto;
 }
 
-.popup.new-list .background .close svg * {
+.popup.new-list .background .refresh-color svg {
+  height: 1.3em;
+  width: auto;
+}
+
+.popup.new-list .background .close svg *,
+.popup.new-list .background .refresh-color svg * {
   stroke: var(--c-txt);
   stroke-width: var(--symbol-width);
 }
 
-.popup.new-list .background .close:hover svg * {
+.popup.new-list .background .close:hover svg *,
+.popup.new-list .background .refresh-color:hover svg * {
   stroke: var(--c-txt-scnd);
 }
 

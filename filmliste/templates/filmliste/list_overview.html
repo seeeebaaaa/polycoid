@@ -1,4 +1,4 @@
-{% load static %} {% load svg %}
+{% load static %} {% load svg %} {% load title_card_colors %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -112,11 +112,11 @@
           </div>
         </div>
         <div class="container">
-          {% if user.is_authenticated %} {% endif %} {% if lists %}
+          {% if lists %}
           <div class="card-container">
             {% for list in lists %}
             <a href="{% url 'filmliste:list-details' list.id %}" tabindex="0">
-              <div class="title-card">
+              <div class="title-card" data-colors="{{ list|colorsJSON|escape }}">
                 <div class="text">
                   {{ list.title }}
                 </div>
@@ -132,10 +132,16 @@
             <div class="pic">
               {% svg 'filmliste/server' class="list-symbol" %}
             </div>
+            {% if user.is_authenticated %}
             <div class="txt">
               <p>You are not part of any list.</p>
               <p>Start a new list or browse other lists.</p>
             </div>
+            {% else %}
+            <div class="txt">
+              <p>Log in or create an account to create or join lists.</p>
+            </div>
+            {% endif %}
           </div>
           {% endif %}
         </div>
@@ -168,10 +174,16 @@
             <div class="pic">
               {% svg 'filmliste/server' class="list-symbol" %}
             </div>
+            {% if user.is_authenticated %}
             <div class="txt">
               <p>There aren't any lists available to browse.</p>
               <p>Ask a friend to create one.</p>
             </div>
+            {% else %}
+            <div class="txt">
+              <p>There aren't any lists available to browse cause you're not logged in.</p>
+            </div>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -210,10 +222,16 @@
             <div class="pic">
               {% svg 'filmliste/server' class="list-symbol" %}
             </div>
+            {% if user.is_authenticated %}
             <div class="txt">
               <p>You haven't interacted with any title yet.</p>
               <p>Add a title to a list to see progress.</p>
             </div>
+            {% else %}
+            <div class="txt">
+              <p>Log in to see the titles you've interacted with.</p>
+            </div>
+            {% endif %}
           </div>
         </div>
       </div>

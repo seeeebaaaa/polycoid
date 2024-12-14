@@ -23,9 +23,10 @@ $(document).ready(_ => {
   $('.popup.new-list button.create').on("click", async event => {
     
     const title = $("#create-list-name").val()
+    const colors = $(".popup.new-list .title-card").data("colors")
     console.log(title);
     
-    const data = await api(FILMLISTE.addlist,{"title":title},CSRF_TOKEN)
+    const data = await api(FILMLISTE.addlist,{"title":title,"colors":colors},CSRF_TOKEN)
     console.log(data);
     
   })
