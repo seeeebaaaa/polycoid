@@ -3,6 +3,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from .validators import validate_file_size
 
+# test user
+# User, 12345678@a
+
 class SignupForm(UserCreationForm):
     type = forms.CharField(widget=forms.HiddenInput,initial="signup")
     email = forms.EmailField(required=True)  # Adding email field

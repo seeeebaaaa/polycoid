@@ -34,6 +34,7 @@ DEBUG = env('DEBUG')
 ALLOWED_HOSTS = ['www.polycoid.com','polycoid.com',env('SERVER_IP')]
 if DEBUG:
   ALLOWED_HOSTS.append('localhost')
+  ALLOWED_HOSTS.append('192.168.178.21')
 
 
 # Application definition

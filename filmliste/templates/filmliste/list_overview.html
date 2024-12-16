@@ -24,9 +24,9 @@
     </script>
     <!-- Icons from https://iconoir.com -->
     <script src="{% static 'filmliste/scripts/utils.js' %}" defer></script>
-    <script src="{% static 'filmliste/scripts/ui.js' %}" defer></script>
+    <script src="{% static 'filmliste/scripts/list_overview/ui.js' %}" defer></script>
     <script
-      src="{% static 'filmliste/scripts/ui_function.js' %}"
+      src="{% static 'filmliste/scripts/list_overview/ui_function.js' %}"
       defer
     ></script>
     <title>Document</title>
@@ -46,13 +46,14 @@
         <div class="my-lists nav-item">
           <a href="#my-lists" tabindex="0" class="active">My Lists</a>
         </div>
-        <div class="browse-lists nav-item">
+        <!-- <div class="browse-lists nav-item">
           <a href="#browse-lists" tabindex="0">Browse Lists</a>
-        </div>
+        </div> -->
         <div class="all-titles nav-item">
           <a href="#my-titles" tabindex="0">My Titles</a>
         </div>
         <div class="profile">
+          {% if user.is_authenticated %}
           <div class="symbol">
             <button>
             <!-- icons: https://iconoir.com -->
@@ -80,6 +81,21 @@
             </svg>
           </button>
           </div>
+          <div class="profile-box">
+            <div class="user">
+              Logged in as <span>{{ user.username }}</span>
+            </div>
+            <div class="logout">
+              <button>
+                Logout
+              </button>
+            </div>
+          </div>
+          {% else %}
+          <a href="{% url 'filmliste:login' %}" class="login">
+            Log in
+          </a>
+          {% endif %}
         </div>
       </div>
       <div class="promote box" id="promote">this is bla bla bla</div>
@@ -89,7 +105,7 @@
           <div class="add-list">
             <div class="symbol">
               <button class="add-new-list">
-                {% svg "filmliste/playlist-plus" %}
+                {% svg "filmliste/database-script-plus" %}
               </button>
             </div>
           </div>
@@ -110,6 +126,13 @@
                 />
                 <button tabindex="-1">{% svg "filmliste/xmark" class="close-list" %}</button>
               </div>
+            </div>
+          </div>
+          <div class="browse-list">
+            <div class="symbol">
+              <button class="browse-for-lists">
+                {% svg "filmliste/keyframes-plus" %}
+              </button>
             </div>
           </div>
         </div>
@@ -148,7 +171,7 @@
           {% endif %}
         </div>
       </div>
-      <div class="browse-lists box" id="browse-lists">
+      <!-- <div class="browse-lists box" id="browse-lists">
         <div class="head">
           <h1>Browse Lists</h1>
           <div class="search">
@@ -179,7 +202,7 @@
             {% if user.is_authenticated %}
             <div class="txt">
               <p>There aren't any lists available to browse.</p>
-              <p>Ask a friend to create one.</p>
+              <p>Ask a friend to create one. <span style="color: red;">(this system needs changing)</span></p>
             </div>
             {% else %}
             <div class="txt">
@@ -188,7 +211,7 @@
             {% endif %}
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="my-titles box" id="my-titles">
         <div class="head">
           <h1>My Titles</h1>
