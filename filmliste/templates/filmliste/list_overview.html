@@ -81,15 +81,16 @@
             </svg>
           </button>
           </div>
-          <div class="profile-box">
+          <div class="bg-shadow hidden" id="profile_box"></div>
+          <div class="profile-box hidden">
             <div class="user">
               Logged in as <span>{{ user.username }}</span>
             </div>
-            <div class="logout">
-              <button>
-                Logout
-              </button>
-            </div>
+            <div>
+            <a href="{% url 'filmliste:logout' %}" class="logout">
+              Logout
+            </a>
+          </div>
           </div>
           {% else %}
           <a href="{% url 'filmliste:login' %}" class="login">

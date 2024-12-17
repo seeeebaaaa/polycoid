@@ -161,9 +161,9 @@ $(document).ready(_ => {
   })
 
   /*\
-   * =================
+   * ===========
    * Popup close
-   * =================
+   * ===========
   \*/
   $('.popup-close').on('click', event => {
     $(event.currentTarget).closest('.popup').addClass('hidden')
@@ -172,6 +172,20 @@ $(document).ready(_ => {
 
   $('body>.bg-shadow').on('click', event => {
     $('.popup').addClass('hidden')
+    $(event.currentTarget).addClass('hidden')
+  })
+
+  /*\
+   * ===========
+   * Profile Box
+   * ===========
+  \*/
+  $('.nav>.profile>.symbol>button').on("click", event => {
+    $(".profile-box").toggleClass("hidden")
+    $(".bg-shadow#profile_box").toggleClass("hidden")
+  })
+  $('.bg-shadow#profile_box').on('click', event => {
+    $('.profile-box').toggleClass('hidden')
     $(event.currentTarget).addClass('hidden')
   })
 })

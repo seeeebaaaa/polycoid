@@ -160,11 +160,14 @@ input[type='text'] {
   align-items: center;
   justify-content: center;
   font-size: 1em;
-  cursor: pointer;
   position: relative;
 }
 
-.nav > .profile:hover > .symbol > button > svg path {
+.nav > .profile > .symbol:hover {
+  cursor: pointer;
+}
+
+.nav > .profile > .symbol:hover > button > svg path {
   stroke: var(--c-txt-scnd);
 }
 
@@ -193,21 +196,48 @@ input[type='text'] {
 
 .nav > .profile > .profile-box {
   position: absolute;
-  top: 100%;
+  top: 180%;
   right: 0px;
-  width: 30em;
-  height: 15em;
+  min-width: 10em;
+  min-height: 10em;
   overflow: hidden;
-  background-color: rebeccapurple;
+  background-color: var(--c-bg);
+  /* background: linear-gradient(
+    0deg,
+    var(--c-txt) -600%,
+    var(--c-bg) 30%,
+    var(--c-txt) 600%
+  ); */
   padding: 1em;
+  border-radius: var(--b-corner);
+  z-index: 100;
+}
+
+.nav > .profile > .bg-shadow {
+  background-color: transparent;
 }
 
 .nav > .profile > .profile-box .user {
   font-size: 1.8em;
+  width: auto;
 }
 
 .nav > .profile > .profile-box .user span {
   font-weight: bolder;
+}
+
+.nav > .profile > .profile-box div {
+  margin-bottom: 1em;
+}
+
+.nav > .profile > .profile-box .logout {
+  font-weight: 400;
+  font-size: 1.8em;
+  color: var(--c-bg);
+  background-color: var(--c-txt);
+  /* margin-top: 0.1em; */
+  padding: 0.3em 0.6em;
+  border-radius: var(--b-corner);
 }
 /*
  *
@@ -613,7 +643,7 @@ body .bg-shadow {
  *
 \*/
 
-.popup {
+.popup.new-list {
   position: fixed;
   top: 50%;
   left: 50%;
