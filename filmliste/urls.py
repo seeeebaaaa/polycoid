@@ -17,5 +17,6 @@ urlpatterns = [
     # path("upload",views.upload_profile_picture, name="upload"),
     #  api views
     path("api/button-test-press",api_views.button_test_press,name="button"),
-    path("api/add-list",api_views.add_list,name="add-list")
+    path("api/add-list",api_views.add_list,name="add-list"),
+    path("api/discover-lists",api_views.discover_lists,name="discover-lists")
 ]

@@ -18,3 +18,8 @@ class ListSerializer(serializers.ModelSerializer):
         if any(word in value.lower() for word in forbidden_words):
             raise serializers.ValidationError("Title contains forbidden words.")
         return value
+    
+class DiscoverListsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = List
+        fields = ['title', 'created_by', 'colors',"id"]

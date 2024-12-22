@@ -1,12 +1,23 @@
-async function api (url, body, csrf_token) {
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': csrf_token // CSRF token for Django POST requests
-    },
-    body: JSON.stringify(body)
-  })
+async function api(url, body, csrf_token, method = "POST") {
+  let response = null
+  if (method == "POST") {
+    response = await fetch(url, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrf_token // CSRF token for Django POST requests
+      },
+      body: JSON.stringify(body)
+    })
+  } else {
+    response = await fetch(url+"?"+ (new URLSearchParams(body)).toString(), {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrf_token // CSRF token for Django POST requests
+      },
+    })
+  }
 
   if (response.redirected) {
     window.location.href = response.url
@@ -66,7 +77,3 @@ function randomMargin(x, n) {
   const max = x + n;
   return Math.random() * (max - min) + min;
 }
-
-// Example usage:
-const randomValue = randomMargin(50, 10);
-console.log(randomValue); // Random value between 40 and 60

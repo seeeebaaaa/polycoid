@@ -20,7 +20,12 @@
     />
     <script>
       const CSRF_TOKEN = '{{ csrf_token }}';
-      const FILMLISTE = { addlist: "{% url 'filmliste:add-list' %}" };
+      const FILMLISTE = { 
+        addlist: "{% url 'filmliste:add-list' %}", 
+        discoverLists:"{% url 'filmliste:discover-lists' %}",
+        listDetails: "{% url 'filmliste:list-details' 0 %}"
+      };
+      const userIs_authenticated =  '{{ user.is_authenticated }}'=="True"?true:false
     </script>
     <!-- Icons from https://iconoir.com -->
     <script src="{% static 'filmliste/scripts/utils.js' %}" defer></script>
@@ -322,13 +327,13 @@
       </div>
     </div>
 
-    <div class="popup new-list hidden">
+    <div class="popup-new-list hidden">
       <div class="title-card">
         <div class="text"></div>
         <div class="text-mirror"></div>
       </div>
       <div class="background">
-        <button class="close popup-close">{% svg "filmliste/xmark"%}</button>
+        <button class="close popup-close-new-list">{% svg "filmliste/xmark"%}</button>
         <button class="refresh-color">{% svg "filmliste/refresh-double"%}</button>
         <input
           type="text"
@@ -342,6 +347,51 @@
         </label>
       </div>
     </div>
-    <div class="bg-shadow hidden"></div>
+    <div class="bg-shadow hidden new-list"></div>
+    <div class="popup browse-lists hidden">
+      <div class="head">
+        <h1>Discover Lists</h1>
+        <button class="close popup-close browse-lists">{% svg "filmliste/xmark"%}</button>
+      </div>
+      <div class="content">
+        <div class="info">Find lists from friends or with topics you like. Use the filter from below <span class="TODO">anderer text oder so</span></div>
+        <div class="query">
+          <div class="filter">
+            <div class="search-box">
+              <div class="symbol">{% svg "filmliste/input-search" class="search-list" %}</div>
+              <div class="input">
+                <input type="text" name="browse-search" placeholder="Enter search text" value="">
+              </div>
+            </div>
+          </div>
+          <div class="error hidden">
+              <p>You need to Log in to browse!</p>
+          </div>
+          <div class="info container">
+            {% if user.is_authenticated %}
+            <div class="info user">
+              <p>There aren't any lists available to browse.</p>
+              <p>Ask a friend to create one. <span style="color: red;">(this system needs changing)</span></p>
+            </div>
+            {% else %}
+            <div class="info anon">
+              <p>There aren't any lists available to browse cause you're not logged in.</p>
+            </div>
+            {% endif %}
+          </div>
+          <div class="cards">
+            <a class="baseCard hidden" href="" tabindex="0">
+              <div class="title-card">
+                <div class="text">
+                </div>
+                <div class="text-mirror">
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-shadow hidden browse-lists"></div>
   </body>
 </html>

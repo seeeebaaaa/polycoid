@@ -61,6 +61,7 @@ $(document).ready(_ => {
    * ===========
   \*/
   $('.title-card').on('font-change', (event, duration = 100) => {
+    
     const title_card = $(event.currentTarget)
     const text = title_card.find('.text')
     const min_font = 0.5
@@ -88,6 +89,8 @@ $(document).ready(_ => {
   $('.title-card').trigger('font-change', 1000)
   // add function that sets gradient form colors
   $('.title-card').on('set-background', (event, args) => {
+    console.log($(event.currentTarget).data("colors"));
+    
     if ($(event.currentTarget).data("colors"))
       colors = $(event.currentTarget).data("colors")
     else if (args)
@@ -124,28 +127,29 @@ $(document).ready(_ => {
   \*/
   // open popup
   $('.add-new-list').on('click', event => {
-    $('.popup.new-list').removeClass('hidden')
-    $('body>.bg-shadow').removeClass('hidden')
-    $('.popup.new-list .refresh-color').trigger('click')
+    $('.popup-new-list').removeClass('hidden')
+    $('.bg-shadow.new-list').removeClass('hidden')
+    $('.popup-new-list .refresh-color').trigger('click')
+    $("#create-list-name").focus()
   })
 
   // mirror input + font change
   $('#create-list-name').on('input', event => {
     // set the popup title card inner text to input
     $(event.currentTarget)
-      .closest('.new-list')
+      .closest('.popup-new-list')
       .find('.title-card .text, .title-card .text-mirror')
       .text($(event.currentTarget).val())
       .trigger('font-change')
   })
 
   // refresh titlecard color
-  $('.popup.new-list .refresh-color').on('click', event => {
+  $('.popup-new-list .refresh-color').on('click', event => {
     // generate random colors
     const colors = generateHSVGoldenColors(7)
     // set colorsp
     $(event.currentTarget)
-    .closest('.popup')
+    .closest('.popup-new-list')
     .find('.title-card')
     .data('colors', colors)
     .trigger('set-background', { colors: colors })
@@ -165,13 +169,13 @@ $(document).ready(_ => {
    * Popup close
    * ===========
   \*/
-  $('.popup-close').on('click', event => {
-    $(event.currentTarget).closest('.popup').addClass('hidden')
-    $('body>.bg-shadow').addClass('hidden')
+  $('.popup-close-new-list').on('click', event => {
+    $(event.currentTarget).closest('.popup-new-list').addClass('hidden')
+    $('.bg-shadow.new-list').addClass('hidden')
   })
 
-  $('body>.bg-shadow').on('click', event => {
-    $('.popup').addClass('hidden')
+  $('.bg-shadow.new-list').on('click', event => {
+    $('.popup-new-list').addClass('hidden')
     $(event.currentTarget).addClass('hidden')
   })
 
@@ -188,4 +192,26 @@ $(document).ready(_ => {
     $('.profile-box').toggleClass('hidden')
     $(event.currentTarget).addClass('hidden')
   })
+
+  /*\
+   * ============
+   * Browse Lists
+   * ============
+  \*/
+  // popup open
+  $('.my-lists.box .browse-for-lists').on("click", event => {
+    $(".popup.browse-lists").removeClass("hidden")
+    $(".bg-shadow.browse-lists").removeClass("hidden")
+  })
+
+  // close popup
+  $(".popup-close.browse-lists").on("click", event => {
+    $(event.currentTarget).closest('.popup').addClass('hidden')
+    $('.bg-shadow.browse-lists').addClass('hidden')
+  })
+  $(".bg-shadow.browse-lists").on("click", event => {
+    $(".popup.browse-lists").addClass('hidden')
+    $('.bg-shadow.browse-lists').addClass('hidden')
+  })
+
 })

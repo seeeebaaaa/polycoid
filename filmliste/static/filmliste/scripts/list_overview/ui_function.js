@@ -29,9 +29,9 @@ $(document).ready(_ => {
    * Add new List
    * ============
   \*/
-  $('.popup.new-list button.create').on('click', async event => {
+  $('.popup-new-list button.create').on('click', async event => {
     const title = $('#create-list-name').val()
-    const colors = $('.popup.new-list .title-card').data('colors')
+    const colors = $('.popup-new-list .title-card').data('colors')
     console.log(title)
 
     const data = await api(
@@ -41,4 +41,66 @@ $(document).ready(_ => {
     )
     console.log(data)
   })
+
+  /*\
+   * ==============
+   * Discover Lists
+   * ==============
+  \*/
+  // on input send discovery request; but only every n seconds to avoid getting ratelimited
+  let debounceTimeout;
+
+  $(".popup.browse-lists .content .query .filter .search-box .input input").on("input", event => {
+    const query = $(event.currentTarget).val();
+
+    if (!userIs_authenticated) {
+      $(".popup.browse-lists .content .query .error").removeClass("hidden")
+      return
+    }
+    $(".popup.browse-lists .content .query .error").addClass("hidden")
+
+    // Clear the previous timeout
+    clearTimeout(debounceTimeout);
+
+    // Set a new timeout to send the request after 2 seconds
+    debounceTimeout = setTimeout(async () => {
+      try {
+        const data = await api(
+          FILMLISTE.discoverLists,
+          { query: query },
+          CSRF_TOKEN,
+          "GET"
+        );
+        response = await data.json()
+        console.log(response);
+        const baseCard = $(".baseCard")
+        const container = $(".popup.browse-lists .content .cards")
+        // remove all other cards
+        container.children("a:not(.baseCard)").remove()
+        // remove info texts
+        const info_container = $(".popup.browse-lists .content .query .info.container")
+        info_container.find(".info").addClass("hidden")
+        // clone title cards and add info
+        for (const result of response.results) {
+          let newCard = baseCard.clone(true).removeClass("baseCard hidden")
+          newCard.find(".text").text(result.title)
+          newCard.find(".text-mirror").text(result.title)
+          newCard.attr("href", FILMLISTE.listDetails.replace("0", result.id.toString()))
+          newCard.find(".title-card").data("colors", result.colors) // note: .data manages internal data and does not set the data- dom attribute
+          // append new card to card container
+          newCard.appendTo(container)
+
+          // trigger relevant functions after appending to ensure proper sizing
+          newCard.find(".title-card").trigger('font-change', 1000)
+          newCard.find(".title-card").trigger('set-background', null)
+        }
+        
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }, 20);
+  });
+
+
+
 })

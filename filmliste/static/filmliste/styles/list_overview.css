@@ -80,7 +80,11 @@ input[type='text'] {
 }
 
 .hidden {
-  display: none;
+  display: none !important; 
+}
+
+.TODO {
+  color: red;
 }
 
 /*
@@ -281,6 +285,9 @@ input[type='text'] {
 
 .box .head .symbol {
   margin-left: 0.5em;
+  display: flex;
+  justify-content: center;
+	align-items: center;
 }
 
 .box .head .symbol,
@@ -290,10 +297,13 @@ input[type='text'] {
 }
 
 .box .head .symbol button {
-  display: grid;
+  display: flex;
+  justify-content: center;
+	align-items: center;
 }
 
 .box .head .symbol button * {
+  width: 1em;
   stroke: var(--c-txt);
   stroke-width: var(--symbol-width);
 }
@@ -429,6 +439,11 @@ input[type='text'] {
 
 .my-lists.box .head .symbol button * {
   stroke-width: 1.4px;
+}
+
+.my-lists.box .head .symbol button.add-new-list {
+  min-width: .85em;
+  width: .85em;
 }
 
 .my-lists.box .card-container {
@@ -638,27 +653,16 @@ body .bg-shadow {
 /*\
  *
  * =================
- * GENERALIZED POPUP
- * =================
- *
-\*/
-
-.popup.new-list {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-/*\
- *
- * =================
  * Create List POPUP
  * =================
  *
 \*/
 
-.popup.new-list {
+.popup-new-list {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 100;
   background: none;
   width: 30em;
@@ -666,7 +670,7 @@ body .bg-shadow {
   font-size: 1.1em;
 }
 
-.popup.new-list .title-card {
+.popup-new-list .title-card {
   box-sizing: border-box;
   position: absolute;
   aspect-ratio: 3/4;
@@ -683,8 +687,8 @@ body .bg-shadow {
   flex-direction: column;
   justify-content: flex-end;
 }
-.popup.new-list .title-card .text,
-.popup.new-list .title-card .text-mirror {
+.popup-new-list .title-card .text,
+.popup-new-list .title-card .text-mirror {
   padding: 0.2em;
   padding-bottom: 0.3em;
   /* line-height: 0.9em; */
@@ -696,14 +700,14 @@ body .bg-shadow {
   word-break: normal;
 }
 
-.popup.new-list .title-card .text-mirror {
+.popup-new-list .title-card .text-mirror {
   visibility: hidden;
   position: absolute;
   top: 0px;
   left: 0px;
 }
 
-.popup.new-list .background {
+.popup-new-list .background {
   background-color: var(--c-bg);
   position: absolute;
   width: 100%;
@@ -717,42 +721,42 @@ body .bg-shadow {
   border-radius: var(--b-corner);
 }
 
-.popup.new-list .background .close {
+.popup-new-list .background .close {
   position: absolute;
   top: 0.5em;
   right: 0.5em;
   z-index: 100;
 }
 
-.popup.new-list .background .refresh-color {
+.popup-new-list .background .refresh-color {
   position: absolute;
   top: 0.8em;
   left: .9em;
   z-index: 100;
 }
 
-.popup.new-list .background .close svg {
+.popup-new-list .background .close svg {
   height: 2em;
   width: auto;
 }
 
-.popup.new-list .background .refresh-color svg {
+.popup-new-list .background .refresh-color svg {
   height: 1.3em;
   width: auto;
 }
 
-.popup.new-list .background .close svg *,
-.popup.new-list .background .refresh-color svg * {
+.popup-new-list .background .close svg *,
+.popup-new-list .background .refresh-color svg * {
   stroke: var(--c-txt);
   stroke-width: var(--symbol-width);
 }
 
-.popup.new-list .background .close:hover svg *,
-.popup.new-list .background .refresh-color:hover svg * {
+.popup-new-list .background .close:hover svg *,
+.popup-new-list .background .refresh-color:hover svg * {
   stroke: var(--c-txt-scnd);
 }
 
-.popup.new-list .background input {
+.popup-new-list .background input {
   width: 14em;
   color: var(--c-txt);
   border-bottom: 1px solid var(--c-txt);
@@ -762,12 +766,12 @@ body .bg-shadow {
   text-align: center;
 }
 
-.popup.new-list .background input::placeholder {
+.popup-new-list .background input::placeholder {
   color: var(--c-txt-scnd);
   text-align: center;
 }
 
-.popup.new-list .background button.create {
+.popup-new-list .background button.create {
   margin-top: 0.1em;
   background-color: var(--c-txt);
   color: var(--c-bg);
@@ -775,6 +779,177 @@ body .bg-shadow {
   border-radius: var(--b-corner);
 }
 
-.popup.new-list .background button.create:hover {
+.popup-new-list .background button.create:hover {
   background-color: var(--c-txt-scnd);
+}
+
+
+/*\
+ *
+ * ==================
+ * Browse Lists POPUP
+ * ==================
+ *
+\*/
+
+.popup.browse-lists {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  background: var(--c-bg);
+  max-width: 80vw;
+  width: 60em;
+  height: 40em;
+  font-size: 1.1em;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+}
+
+.popup.browse-lists .head {
+  display: flex;
+  justify-content: space-between;
+	align-items: center;
+}
+
+.popup.browse-lists h1 {
+  margin: 0;
+  color: var(--c-txt);
+}
+
+.popup.browse-lists .close {
+  /* position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  z-index: 100; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup.browse-lists .close svg {
+  height: 3em;
+  width: auto;
+}
+
+.popup.browse-lists .close svg * {
+  stroke: var(--c-txt);
+  stroke-width: var(--symbol-width);
+}
+
+.popup.browse-lists .content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  color: var(--c-txt);
+  overflow: hidden;
+  height: 100%;
+}
+.popup.browse-lists .content .query{
+  flex-grow: 1;
+  max-height: 100%;
+
+}
+
+.popup.browse-lists .content .query .filter .search-box {
+  display: flex;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.popup.browse-lists .content .query .filter .search-box .symbol{
+  padding-left: .5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup.browse-lists .content .query .filter .search-box .symbol svg {
+  width: 2em;
+}
+
+.popup.browse-lists .content .query .filter .search-box .symbol svg *{
+  stroke-width: var(--symbol-width);
+  stroke: var(--c-txt);
+}
+
+.popup.browse-lists .content .query .filter .search-box .input {
+  flex-grow: 1;
+  padding-left: 1em;
+  padding-right: 2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup.browse-lists .content .query .filter .search-box .input input{
+  border-bottom: 1px solid var(--c-txt);
+  width: 100%;
+}
+
+.popup.browse-lists .content .cards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: center;
+  gap: 1.5em;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 100%;
+  height: 100%;
+  max-height: 70%;
+}
+
+.popup.browse-lists .content .cards .title-card {
+  box-sizing: border-box;
+  height: 13.5em;
+  aspect-ratio: 3/4;
+  background-color: hsla(0, 100%, 50%, 1);
+  background-image: radial-gradient(
+      at 40% 20%,
+      rgb(255, 184, 122) 0px,
+      transparent 50%
+    ),
+    radial-gradient(at 80% 0%, rgb(31, 221, 255) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, rgb(255, 219, 222) 0px, transparent 50%),
+    radial-gradient(at 80% 50%, rgb(255, 133, 173) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgb(255, 181, 138) 0px, transparent 50%),
+    radial-gradient(at 80% 100%, rgb(107, 102, 255) 0px, transparent 50%),
+    radial-gradient(at 0% 0%, rgb(255, 133, 167) 0px, transparent 50%);
+  z-index: 100;
+  border-radius: var(--b-corner);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+}
+.popup.browse-lists .content .cards .title-card:hover{
+  filter:brightness(71.26%); /* rate of brightness reduction between --c-txt and --c-txt-scnd*/
+}
+
+.popup.browse-lists .content .cards .title-card .text,
+.popup.browse-lists .content .cards .title-card .text-mirror {
+  color: var(--c-txt);
+  padding: 0.2em;
+  padding-bottom: 0.3em;
+  /* line-height: 0.9em; */
+  max-width: 100%;
+  max-height: 100%;
+  font-size: 0.3em;
+  font-weight: bolder;
+  word-wrap: break-word;
+  word-break: normal;
+}
+
+.popup.browse-lists .content .cards .title-card .text-mirror {
+  font-size: 3em;
+  visibility: hidden;
+  position: absolute;
+  top: 0px;
+  left: 0px;
 }

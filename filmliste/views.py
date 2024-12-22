@@ -19,9 +19,7 @@ def dev(request):
 
 def list_overview(request):
     if request.user.is_authenticated:
-        print("sth")
         lists = List.objects.filter(created_by=request.user)
-        print(lists)
     else:
         lists = None
     return render(request,"filmliste/list_overview.html",{"lists":lists})
