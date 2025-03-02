@@ -25,7 +25,7 @@
         discoverLists:"{% url 'filmliste:discover-lists' %}",
         listDetails: "{% url 'filmliste:list-details' 0 %}"
       };
-      const userIs_authenticated =  '{{ user.is_authenticated }}'=="True"?true:false
+      const userIs_authenticated =  '{{ user.is_authenticated }}'=="True"?true:false;
     </script>
     <!-- Icons from https://iconoir.com -->
     <script src="{% static 'filmliste/scripts/utils.js' %}" defer></script>
@@ -177,47 +177,6 @@
           {% endif %}
         </div>
       </div>
-      <!-- <div class="browse-lists box" id="browse-lists">
-        <div class="head">
-          <h1>Browse Lists</h1>
-          <div class="search">
-            <div class="search-container">
-              <div class="symbol">
-                <button>
-                  {% svg "filmliste/input-search" class="search-list" %}
-                </button>
-              </div>
-              <div class="search-box">
-                <input
-                  type="text"
-                  name="tobechangedfromdjango"
-                  id="browse-lists-search"
-                  placeholder="Enter list name"
-                  tabindex="-1"
-                />
-                <button tabindex="-1">{% svg "filmliste/xmark" class="close-list" %}</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="container">
-          <div class="none">
-            <div class="pic">
-              {% svg 'filmliste/server' class="list-symbol" %}
-            </div>
-            {% if user.is_authenticated %}
-            <div class="txt">
-              <p>There aren't any lists available to browse.</p>
-              <p>Ask a friend to create one. <span style="color: red;">(this system needs changing)</span></p>
-            </div>
-            {% else %}
-            <div class="txt">
-              <p>There aren't any lists available to browse cause you're not logged in.</p>
-            </div>
-            {% endif %}
-          </div>
-        </div>
-      </div> -->
       <div class="my-titles box" id="my-titles">
         <div class="head">
           <h1>My Titles</h1>
@@ -312,20 +271,6 @@
         </div>
       </div>
     </div>
-    <div class="modal" style="display: none">
-      <h1>New List</h1>
-      <div class="flow">
-        whoooowowowowoow
-        <br />
-        lahfkhakf
-        <br />
-        kjshfkhsf
-        <br />
-        slfhsjhfl
-        <br />
-        uwu
-      </div>
-    </div>
 
     <div class="popup-new-list hidden">
       <div class="title-card">
@@ -354,7 +299,6 @@
         <button class="close popup-close browse-lists">{% svg "filmliste/xmark"%}</button>
       </div>
       <div class="content">
-        <div class="info">Find lists from friends or with topics you like. Use the filter from below <span class="TODO">anderer text oder so</span></div>
         <div class="query">
           <div class="filter">
             <div class="search-box">
@@ -367,18 +311,6 @@
           <div class="error hidden">
               <p>You need to Log in to browse!</p>
           </div>
-          <div class="info container">
-            {% if user.is_authenticated %}
-            <div class="info user">
-              <p>There aren't any lists available to browse.</p>
-              <p>Ask a friend to create one. <span style="color: red;">(this system needs changing)</span></p>
-            </div>
-            {% else %}
-            <div class="info anon">
-              <p>There aren't any lists available to browse cause you're not logged in.</p>
-            </div>
-            {% endif %}
-          </div>
           <div class="cards">
             <a class="baseCard hidden" href="" tabindex="0">
               <div class="title-card">
@@ -388,6 +320,15 @@
                 </div>
               </div>
             </a>
+            <div class="info more hidden">
+              There are <span></span> more lists that arent shown. Refine your query to show them.
+            </div>
+            <div class="info none hidden">
+              <p>Your query did not match any list.</p>  
+            </div>
+            <div class="loading hidden">
+              {% svg "filmliste/select-point3d"%}
+            </div>
           </div>
         </div>
       </div>

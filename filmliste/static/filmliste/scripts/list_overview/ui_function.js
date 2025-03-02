@@ -32,14 +32,12 @@ $(document).ready(_ => {
   $('.popup-new-list button.create').on('click', async event => {
     const title = $('#create-list-name').val()
     const colors = $('.popup-new-list .title-card').data('colors')
-    console.log(title)
 
     const data = await api(
       FILMLISTE.addlist,
       { title: title, colors: colors },
       CSRF_TOKEN
     )
-    console.log(data)
   })
 
   /*\
@@ -62,6 +60,9 @@ $(document).ready(_ => {
     // Clear the previous timeout
     clearTimeout(debounceTimeout);
 
+    // setup loading symbol
+    $(".popup.browse-lists .content .cards .loading").removeClass("hidden").find("svg").addClass("spinning")
+
     // Set a new timeout to send the request after 2 seconds
     debounceTimeout = setTimeout(async () => {
       try {
@@ -72,14 +73,15 @@ $(document).ready(_ => {
           "GET"
         );
         response = await data.json()
-        console.log(response);
         const baseCard = $(".baseCard")
         const container = $(".popup.browse-lists .content .cards")
         // remove all other cards
         container.children("a:not(.baseCard)").remove()
         // remove info texts
-        const info_container = $(".popup.browse-lists .content .query .info.container")
-        info_container.find(".info").addClass("hidden")
+        container.find(".info").addClass("hidden")
+        // if no results were found display none text
+        if (response.results.length == 0) 
+          container.find(".info.none").removeClass("hidden")
         // clone title cards and add info
         for (const result of response.results) {
           let newCard = baseCard.clone(true).removeClass("baseCard hidden")
@@ -95,10 +97,20 @@ $(document).ready(_ => {
           newCard.find(".title-card").trigger('set-background', null)
         }
         
+        // remove laoding
+        $(".popup.browse-lists .content .cards .loading").addClass("hidden").find("svg").removeClass("spinning")
+
+        // set more notification
+        if (response.has_more) {
+          $(".popup.browse-lists .content .query .cards .info.more").removeClass("hidden").appendTo(container).find("span").text(response.has_more)
+        }
+        else
+          $(".popup.browse-lists .content .query .cards .info.more").addClass("hidden")
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-    }, 20);
+    }, 1000);
   });
 
 

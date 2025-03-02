@@ -89,7 +89,6 @@ $(document).ready(_ => {
   $('.title-card').trigger('font-change', 1000)
   // add function that sets gradient form colors
   $('.title-card').on('set-background', (event, args) => {
-    console.log($(event.currentTarget).data("colors"));
     
     if ($(event.currentTarget).data("colors"))
       colors = $(event.currentTarget).data("colors")
@@ -200,7 +199,7 @@ $(document).ready(_ => {
   \*/
   // popup open
   $('.my-lists.box .browse-for-lists').on("click", event => {
-    $(".popup.browse-lists").removeClass("hidden")
+    $(".popup.browse-lists").removeClass("hidden").find(".title-card").trigger('font-change', 1000)
     $(".bg-shadow.browse-lists").removeClass("hidden")
   })
 

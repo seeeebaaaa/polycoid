@@ -508,16 +508,10 @@ input[type='text'] {
 }
 
 /*\
- * ================
- * Browse Lists Box
- * ================
+ * =============
+ * My Titles Box
+ * =============
 \*/
-
-.browse-lists.box {
-  color: var(--c-txt);
-  z-index: 0;
-  position: relative;
-}
 
 .my-titles.box {
   color: var(--c-txt);
@@ -545,7 +539,7 @@ input[type='text'] {
   align-items: flex-start;
   /* padding-top: 1em; */
   padding: 0em 20em 1em;
-  margin-top: 2em;
+  margin-top: 3em;
 }
 
 .footer a:hover {
@@ -611,43 +605,6 @@ body .bg-shadow {
   left: 0px;
   background-color: rgba(0, 0, 0, 0.624);
   z-index: 75;
-}
-
-/*\
- *
- * ==================
- * GENERALIZED MODALS
- * ==================
- *
-\*/
-
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 20em;
-  max-width: 80%;
-  height: 20em;
-  max-height: 80%;
-  background-color: red;
-}
-
-.modal .flow {
-  /* other stuff we already covered */
-
-  /* cover the modal */
-  position: relative;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  /* spacing as needed */
-  padding: 20px 50px 20px 20px;
-
-  /* let it scroll */
-  overflow: auto;
 }
 
 /*\
@@ -801,11 +758,12 @@ body .bg-shadow {
   background: var(--c-bg);
   max-width: 80vw;
   width: 60em;
-  height: 40em;
+  max-height: 40em;
   font-size: 1.1em;
   padding: 1em;
   display: flex;
   flex-direction: column;
+  border-radius: var(--b-corner);
 }
 
 .popup.browse-lists .head {
@@ -849,7 +807,7 @@ body .bg-shadow {
 }
 .popup.browse-lists .content .query{
   flex-grow: 1;
-  max-height: 100%;
+  max-height: 35em;
 
 }
 
@@ -893,15 +851,53 @@ body .bg-shadow {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  align-content: center;
   gap: 1.5em;
   overflow-y: scroll;
   overflow-x: hidden;
   margin-top: auto;
   margin-bottom: auto;
   width: 100%;
+  min-height: 5em;
+  max-height: 30em;
+  position: relative;
+  /* max-height: 70%; */
+}
+
+.popup.browse-lists .content .cards .loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  width: 100%;
   height: 100%;
-  max-height: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.234);
+}
+
+.popup.browse-lists .content .cards .loading svg {
+  width: 3.7em;
+  translate: -1em -.7em;
+}
+
+.popup.browse-lists .content .cards .loading svg *{
+  stroke-width: var(--symbol-width);
+  stroke: var(--c-txt);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinning {
+  animation: spin 2s linear infinite;
 }
 
 .popup.browse-lists .content .cards .title-card {
@@ -920,7 +916,6 @@ body .bg-shadow {
     radial-gradient(at 0% 100%, rgb(255, 181, 138) 0px, transparent 50%),
     radial-gradient(at 80% 100%, rgb(107, 102, 255) 0px, transparent 50%),
     radial-gradient(at 0% 0%, rgb(255, 133, 167) 0px, transparent 50%);
-  z-index: 100;
   border-radius: var(--b-corner);
   overflow: hidden;
   display: flex;
