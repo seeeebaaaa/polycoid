@@ -16,6 +16,9 @@ git reset --hard origin/main
 # Install dependencies
 pip install -r requirements.txt
 
+# Make migrations
+python manage.py makemigrations
+
 # Run migrations
 python manage.py migrate
 
