@@ -34,26 +34,31 @@ DEBUG = env('DEBUG')
 ALLOWED_HOSTS = ['www.polycoid.com','polycoid.com',env('SERVER_IP')]
 if DEBUG:
   ALLOWED_HOSTS.append('localhost')
+  ALLOWED_HOSTS.append('192.168.178.21')
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'corsheaders',
+    'django.contrib.admin', # comment out when making migrations
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'filmliste.apps.FilmlisteConfig'
+    'filmliste.apps.FilmlisteConfig',
+    'rest_framework',
+    'dj_svg', # adds inline svg template support
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware', # manages sessions across requests.
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware', # associates users with requests using sessions.
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -112,6 +117,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = "filmliste.CustomUser"
+
+CORS_ALLOWED_ORIGINS = [
+  "https://polycoid.com",
+  "https://www.polycoid.com",
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -141,3 +152,28 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 # for user uploaded content
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+
+
+# mail server
+
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+
+# rest api
+
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_RATES': {
+        'user': '60/minute', 
+        'anon': '20/minute', 
+    },
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.UserRateThrottle',
+        'rest_framework.throttling.AnonRateThrottle',
+    ],
+}

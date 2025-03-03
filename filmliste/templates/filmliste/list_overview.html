@@ -1,0 +1,338 @@
+{% load static %} {% load svg %} {% load title_card_colors %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{% static 'filmliste/styles/list_overview.css' %}"
+    />
+    <script src="{% static 'filmliste/scripts/thirdparty/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'filmliste/scripts/thirdparty/jquery-ui.min.js' %}"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="{% static 'filmliste/scripts/thirdparty/jquery-ui.min.css' %}"/>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      const CSRF_TOKEN = '{{ csrf_token }}';
+      const FILMLISTE = { 
+        addlist: "{% url 'filmliste:add-list' %}", 
+        discoverLists:"{% url 'filmliste:discover-lists' %}",
+        listDetails: "{% url 'filmliste:list-details' 0 %}"
+      };
+      const userIs_authenticated =  '{{ user.is_authenticated }}'=="True"?true:false;
+    </script>
+    <!-- Icons from https://iconoir.com -->
+    <script src="{% static 'filmliste/scripts/utils.js' %}" defer></script>
+    <script src="{% static 'filmliste/scripts/list_overview/ui.js' %}" defer></script>
+    <script
+      src="{% static 'filmliste/scripts/list_overview/ui_function.js' %}"
+      defer
+    ></script>
+    <title>Document</title>
+  </head>
+  <body>
+    {% comment %} {% if user.is_authenticated %} YOURE LOGGED IN {% else %} not
+    logoed in :( {% endif %} shows lsit and overview {% if user.profile_picture
+    %}
+    <img src="{{ user.profile_picture.url }}" alt="Profile Picture" />
+    {% else %}
+    <p>No profile picture uploaded yet.</p>
+    {% endif %} {% endcomment %}
+
+    <div class="main">
+      <div class="nav">
+        <div class="home"><a href="#promote" tabindex="0">Filmliste</a></div>
+        <div class="my-lists nav-item">
+          <a href="#my-lists" tabindex="0" class="active">My Lists</a>
+        </div>
+        <!-- <div class="browse-lists nav-item">
+          <a href="#browse-lists" tabindex="0">Browse Lists</a>
+        </div> -->
+        <div class="all-titles nav-item">
+          <a href="#my-titles" tabindex="0">My Titles</a>
+        </div>
+        <div class="profile">
+          {% if user.is_authenticated %}
+          <div class="symbol">
+            <button>
+            <!-- icons: https://iconoir.com -->
+            <?xml version="1.0" encoding="UTF-8"?><svg
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              color="#000000"
+            >
+              <path
+                d="M5 20V19C5 15.134 8.13401 12 12 12V12C15.866 12 19 15.134 19 19V20"
+                stroke="#000000"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+              <path
+                d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z"
+                stroke="#000000"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+          </button>
+          </div>
+          <div class="bg-shadow hidden" id="profile_box"></div>
+          <div class="profile-box hidden">
+            <div class="user">
+              Logged in as <span>{{ user.username }}</span>
+            </div>
+            <div>
+            <a href="{% url 'filmliste:logout' %}" class="logout">
+              Logout
+            </a>
+          </div>
+          </div>
+          {% else %}
+          <a href="{% url 'filmliste:login' %}" class="login">
+            Log in
+          </a>
+          {% endif %}
+        </div>
+      </div>
+      <div class="promote box" id="promote">this is bla bla bla</div>
+      <div class="my-lists box" id="my-lists">
+        <div class="head">
+          <h1>My Lists</h1>
+          <div class="add-list">
+            <div class="symbol">
+              <button class="add-new-list">
+                {% svg "filmliste/database-script-plus" %}
+              </button>
+            </div>
+          </div>
+          <div class="search">
+            <div class="search-container">
+              <div class="symbol">
+                <button>
+                  {% svg "filmliste/input-search" class="search-list" %}
+                </button>
+              </div>
+              <div class="search-box">
+                <input
+                  type="text"
+                  name="tobechangedfromdjango"
+                  id="my-lists-search"
+                  placeholder="Enter list name"
+                  tabindex="-1"
+                />
+                <button tabindex="-1">{% svg "filmliste/xmark" class="close-list" %}</button>
+              </div>
+            </div>
+          </div>
+          <div class="browse-list">
+            <div class="symbol">
+              <button class="browse-for-lists">
+                {% svg "filmliste/keyframes-plus" %}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          {% if lists %}
+          <div class="card-container">
+            {% for list in lists %}
+            <a href="{% url 'filmliste:list-details' list.id %}" tabindex="0">
+              <div class="title-card" data-colors="{{ list|colorsJSON|escape }}">
+                <div class="text">
+                  {{ list.title|escape }}
+                </div>
+                <div class="text-mirror">
+                  {{ list.title|escape }}
+                </div>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="none">
+            <div class="pic">
+              {% svg 'filmliste/server' class="list-symbol" %}
+            </div>
+            {% if user.is_authenticated %}
+            <div class="txt">
+              <p>You are not part of any list.</p>
+              <p>Start a new list or browse other lists.</p>
+            </div>
+            {% else %}
+            <div class="txt">
+              <p>Log in or create an account to create or join lists.</p>
+            </div>
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="my-titles box" id="my-titles">
+        <div class="head">
+          <h1>My Titles</h1>
+          <!-- <div class="add-list">
+            <div class="symbol">
+              <button>
+                {% svg "filmliste/playlist-plus" class="add-list" %}
+              </button>
+            </div>
+          </div> -->
+          <div class="search">
+            <div class="search-container">
+              <div class="symbol">
+                <button>
+                  {% svg "filmliste/input-search" class="search-list" %}
+                </button>
+              </div>
+              <div class="search-box">
+                <input
+                  type="text"
+                  name="tobechangedfromdjango"
+                  id="my-titles-search"
+                  placeholder="Enter title name"
+                  tabindex="-1"
+                />
+                <button tabindex="-1">{% svg "filmliste/xmark" class="close-list" %}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="none">
+            <div class="pic">
+              {% svg 'filmliste/server' class="list-symbol" %}
+            </div>
+            {% if user.is_authenticated %}
+            <div class="txt">
+              <p>You haven't interacted with any title yet.</p>
+              <p>Add a title to a list to see progress.</p>
+            </div>
+            {% else %}
+            <div class="txt">
+              <p>Log in to see the titles you've interacted with.</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <div class="footer-col">
+          <div class="h3 filmliste">
+            <a href>Filmliste</a>
+          </div>
+          <ul>
+            <li><a href="#impressum">Impressum</a></li>
+            <li><a href="#daten"> Datenschutzerklärung</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="h3">
+            <a href="https://www.themoviedb.org/">
+              <img
+                src="{% static 'filmliste/images/tmdb_logo.svg' %}"
+                alt="The Movie Database"
+              />
+            </a>
+          </div>
+          <ul>
+            <li><a href="https://www.themoviedb.org/">Visit their site</a></li>
+            <li>
+              This product uses the TMDB API but is not endorsed or certified by
+              TMDB.
+            </li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="h3">
+            <a href="https://www.justwatch.com/">
+              <img
+                src="{% static 'filmliste/images/JustWatch_logo.webp' %}"
+                alt="JustWatch"
+              />
+            </a>
+          </div>
+          <ul>
+            <li><a href="https://www.justwatch.com/">Visit their site</a></li>
+            <li>
+              This product uses data originating from, but is not endorsed by,
+              JustWatch.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="popup-new-list hidden">
+      <div class="title-card">
+        <div class="text"></div>
+        <div class="text-mirror"></div>
+      </div>
+      <div class="background">
+        <button class="close popup-close-new-list">{% svg "filmliste/xmark"%}</button>
+        <button class="refresh-color">{% svg "filmliste/refresh-double"%}</button>
+        <input
+          type="text"
+          name="list-name"
+          id="create-list-name"
+          placeholder="Enter new list name"
+          maxlength="30"
+        />
+        <label for="list-name"
+          ><button class="create">Create List</button>
+        </label>
+      </div>
+    </div>
+    <div class="bg-shadow hidden new-list"></div>
+    <div class="popup browse-lists hidden">
+      <div class="head">
+        <h1>Discover Lists</h1>
+        <button class="close popup-close browse-lists">{% svg "filmliste/xmark"%}</button>
+      </div>
+      <div class="content">
+        <div class="query">
+          <div class="filter">
+            <div class="search-box">
+              <div class="symbol">{% svg "filmliste/input-search" class="search-list" %}</div>
+              <div class="input">
+                <input type="text" name="browse-search" placeholder="Enter search text" value="">
+              </div>
+            </div>
+          </div>
+          <div class="error hidden">
+              <p>You need to Log in to browse!</p>
+          </div>
+          <div class="cards">
+            <a class="baseCard hidden" href="" tabindex="0">
+              <div class="title-card">
+                <div class="text">
+                </div>
+                <div class="text-mirror">
+                </div>
+              </div>
+            </a>
+            <div class="info more hidden">
+              There are <span></span> more lists that arent shown. Refine your query to show them.
+            </div>
+            <div class="info none hidden">
+              <p>Your query did not match any list.</p>  
+            </div>
+            <div class="loading hidden">
+              {% svg "filmliste/select-point3d"%}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-shadow hidden browse-lists"></div>
+  </body>
+</html>

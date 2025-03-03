@@ -1,0 +1,102 @@
+{% load static %} {% load svg %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'filmliste/scripts/thirdparty/jquery-ui.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'filmliste/styles/login.css' %}" />
+    <script src="{% static 'filmliste/scripts/thirdparty/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'filmliste/scripts/thirdparty/jquery-ui.min.js' %}"></script>
+    <script>
+      const CSRF_TOKEN = '{{ csrf_token }}';
+    </script>
+    <script src="{% static 'filmliste/scripts/login/ui.js' %}" defer></script>
+    <script
+      src="{% static 'filmliste/scripts/login/ui_function.js' %}"
+      defer
+    ></script>
+
+    <title>Filmliste - Login</title>
+  </head>
+  <body>
+    <div class="main">
+      <div class="content">
+        <div class="head">
+          <button class="login select selected">
+            <span>Log in</span>
+          </button>
+          <button class="register select">
+            <span>Register</span>
+          </button>
+        </div>
+        <div class="inner">
+          <div class="login">
+            <form action="{% url 'filmliste:login' %}" method="post">
+              {% csrf_token %}
+              {{ login.type }}
+              <div class="field">
+                {{ login.username.label_tag}}
+                {{ login.username }}
+                {{ login.username.help_text }}
+              </div>
+              <div class="field">
+                {{ login.password.label_tag}}
+                {{ login.password }}
+                {{ login.password.help_text }}
+              </div>
+              <input type="submit" value="Log in" />
+            </form>
+          </div>
+          <div class="register hidden">
+            <form action="{% url 'filmliste:login' %}" method="post">
+              {% csrf_token %}
+              {{ signup.type }}
+              <div class="field">
+                {{ signup.username.label_tag }}
+                {{ signup.username }}
+                {% comment %} {{ signup.username.help_text }} {% endcomment %}
+              </div>
+              <div class="field">
+                {{ signup.email.label_tag}}
+                {{ signup.email }}
+                {% comment %} {{ signup.email.help_text }} {% endcomment %}
+              </div>
+              <div class="field">
+                {{ signup.password1.label_tag}}
+                {{ signup.password1 }}
+                {% comment %} {{ signup.password1.help_text }} {% endcomment %}
+              </div>
+              <div class="field">
+                {{ signup.password2.label_tag}}
+                {{ signup.password2 }}
+                {% comment %} {{ signup.password.help_text }} {% endcomment %}
+              </div>
+              <input type="submit" value="Register" />
+            </form>
+          </div>
+        </div>
+      </div>
+      {% comment %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}Login<form action="{% url 'filmliste:login' %}" method="post">
+        {% csrf_token %}
+        {{ login.as_p }}
+        <input type="submit" value="Ok" />
+      </form>
+      <br />
+      Register/Signup<form action="{% url 'filmliste:login' %}" method="post">
+        {% csrf_token %}
+        {{ signup.as_p }}
+        <input type="submit" value="Ok" />
+      </form> 
+      {% endcomment %}
+
+    </div>
+  </body>
+</html>

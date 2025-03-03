@@ -1,0 +1,420 @@
+/* * {
+  outline: 1px solid red;
+} */
+
+:root {
+  --padding-left: 4%;
+  --padding-right: 4%;
+  --c-bg: rgb(24, 24, 24);
+  --c-bg-a: rgba(24, 24, 24, 0.75);
+  --c-acc: red;
+  --c-txt: rgb(223, 223, 223);
+  --c-txt-scnd: rgb(159, 159, 159);
+  --b-corner: 0.2em;
+  --hover-t: 50ms;
+  --hover-b: 75%;
+  --img-corner: 0.3em;
+  --svg-stroke-thickness: 0.2em;
+  --c-tier-started: #f6b26b;
+  --c-tier-remaining: rgb(76, 76, 76);
+  --c-tier-done: #90dc6e;
+}
+
+div:has(> img) {
+  position: relative;
+  overflow: hidden;
+}
+
+div:has(> img)::after {
+  content: ' ';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 105%;
+  width: 140%;
+  aspect-ratio: 1/1;
+  clip-path: polygon(100% 75%, 100% 85%, 85% 100%, 75% 100%);
+}
+
+div:has(> img).done::after {
+  background-color: var(--c-tier-done);
+}
+div:has(> img).remaining::after {
+  background-color: var(--c-tier-remaining);
+}
+div:has(> img).started::after {
+  background-color: var(--c-tier-started);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* .bebas-neue-regular {
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+} */
+
+html,
+body {
+  margin: 0;
+  box-sizing: border-box;
+  background-color: var(--c-bg);
+  font-family: Tahoma, sans-serif; /* web safe fallback font */
+  /* font-size: 1.3vw; */
+  font-size: calc(10px + 0.6vw);
+}
+
+.main {
+  height: auto;
+  width: 100vw;
+  background-color: var(--c-bg);
+}
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: var(--padding-left);
+  padding-right: var(--padding-right);
+  background-color: var(--c-bg);
+  padding-top: 1em;
+  padding-bottom: 0.5em;
+  font-size: 0.7em;
+}
+
+.nav > .home {
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: 400;
+  font-size: 2.4em;
+  color: var(--c-acc);
+  padding-top: 0.1em;
+  margin-right: 0.3em;
+}
+
+.nav > .current,
+.nav > .started,
+.nav > .remaining,
+.nav > .done {
+  color: var(--c-txt-scnd);
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: 400;
+  font-size: 1.3em;
+  margin-left: 1.75em;
+}
+
+.nav > .current:hover,
+.nav > .started:hover,
+.nav > .remaining:hover,
+.nav > .done:hover {
+  color: var(--c-txt);
+}
+
+.nav > .current > a.active,
+.nav > .started > a.active,
+.nav > .remaining > a.active,
+.nav > .done > a.active {
+  color: var(--c-txt);
+  text-decoration: underline;
+}
+
+.nav > .search {
+  margin-left: auto;
+  margin-right: 1.75em;
+  color: var(--c-txt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.nav > .search:hover > .symbol > svg path {
+  stroke: var(--c-txt-scnd);
+}
+
+.nav > .search > .symbol > svg {
+  height: 2em;
+}
+
+.nav > .search > .symbol > svg path {
+  stroke: var(--c-txt);
+  stroke-width: var(--svg-stroke-thickness);
+}
+
+.nav > .profile {
+  color: var(--c-txt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.nav > .profile:hover > .symbol > svg path {
+  stroke: var(--c-txt-scnd);
+}
+
+.nav > .profile > .symbol > svg {
+  height: 2.3em;
+}
+
+.nav > .profile > .symbol > svg path {
+  stroke: var(--c-txt);
+  stroke-width: var(--svg-stroke-thickness);
+}
+
+.front {
+  height: 90vh;
+
+  color: var(--c-txt);
+  z-index: 0;
+  position: relative;
+}
+
+.front > .bg {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background-image: url('images/potc_2.jpg');
+  background-position: right;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  filter: blur(100px);
+  z-index: -1;
+}
+
+.front > .content {
+  margin-top: auto;
+  margin-bottom: auto;
+  height: 100%;
+  position: relative;
+  padding-left: var(--padding-left);
+  padding-right: var(--padding-right);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: var(--padding-right);
+}
+
+.front > .content > .info {
+  color: var(--c-txt);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.front > .content > .info > .title {
+  max-width: 80%;
+}
+
+.front > .content > .info > .title > .title {
+  font-size: 250%;
+}
+.front > .content > .info > .title > .sub {
+  color: var(--c-txt-scnd);
+  font-size: 120%;
+}
+
+.front > .content > .info > .action {
+  position: relative;
+  width: 80%;
+  margin-bottom: 2em;
+  margin-top: 2em;
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+}
+
+.front > .content > .info > .action > .button {
+  background-color: var(--c-txt);
+  color: var(--c-bg);
+  font-weight: bolder;
+  font-size: 1.5em;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  border-radius: var(--b-corner);
+  transition: var(--hover-t);
+  border-style: none;
+  cursor: pointer;
+}
+
+.front > .content > .info > .action > .next {
+  width: 7em;
+  padding: 0.5em;
+}
+
+.front > .content > .info > .action > .back {
+  margin-left: 0.8em;
+  width: 2.7em;
+  padding: 0.4em;
+}
+
+.front > .content > .info > .action > .button > span {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+.front > .content > .info > .action > .button > span > span {
+  padding-top: 0.1em;
+}
+
+.front > .content > .info > .action > .next > span > svg {
+  width: 1.5em;
+  height: auto;
+}
+
+.front > .content > .info > .action > .back > span > svg {
+  width: 1.7em;
+  height: auto;
+}
+
+.front > .content > .info > .action > .next > span > svg > path {
+  fill: var(--c-bg);
+  stroke: var(--c-bg);
+}
+
+.front > .content > .info > .action > .back > span > svg > path {
+  stroke: var(--c-bg);
+  stroke-width: 0.1em;
+}
+
+.front > .content > .info > .action > .button:hover {
+  filter: brightness(var(--hover-b));
+}
+
+.front > .content > .info > .further {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  max-width: 80%;
+  position: relative;
+}
+
+.front > .content > .info > .further > .title {
+  font-weight: bolder;
+  margin-bottom: 0.5em;
+}
+
+.front > .content > .info > .further > .entries {
+  display: flex;
+  overflow: scroll;
+  background: none;
+}
+
+.front > .content > .info > .further > .entries .entry {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  margin-right: 1em;
+  position: relative;
+}
+
+.front > .content > .info > .further > .entries .entry > .hover_overlay {
+  height: 10em;
+  width: 100%;
+  position: absolute;
+  border-radius: var(--img-corner);
+  background-color: var(--c-bg-a);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0%;
+  transition: var(--hover-t);
+}
+
+.front > .content > .info > .further > .entries .entry > .hover_overlay:hover {
+  opacity: 100%;
+}
+
+.front > .content > .info > .further > .entries .entry > .hover_overlay button {
+  background-color: var(--c-txt);
+  color: var(--c-bg);
+  font-weight: bolder;
+  font-size: 0.95em;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  border-radius: var(--b-corner);
+  transition: var(--hover-t);
+  border-style: none;
+  cursor: pointer;
+  margin: 0.6em 0em;
+}
+
+.front
+  > .content
+  > .info
+  > .further
+  > .entries
+  .entry
+  > .hover_overlay
+  button:hover {
+  filter: brightness(var(--hover-b));
+}
+
+.front
+  > .content
+  > .info
+  > .further
+  > .entries
+  .entry
+  > .hover_overlay
+  button
+  svg {
+  width: 2em;
+  height: 2em;
+}
+
+.front > .content > .info > .further > .entries .entry > .title {
+  font-size: 0.7em;
+  margin-bottom: 2em;
+}
+
+.front > .content > .info > .further > .entries .entry > .img {
+  height: 10em;
+  border-radius: var(--img-corner);
+  margin-bottom: 0.4em;
+}
+
+.front > .content > .info > .further > .entries .entry > .img > img {
+  height: 10em;
+  margin-bottom: 0.4em;
+}
+
+.front > .content > .pic {
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.front > .content > .pic > img {
+  /* height: 80%; */
+  max-height: 80%;
+  width: 25em;
+  border-radius: var(--img-corner);
+}
+
+.main > .started {
+  height: 80%;
+}
+
+.main > .remaining {
+  height: 20vh;
+}
+
+.main > .done {
+  height: 20vh;
+}

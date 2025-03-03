@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Dropdown with SVG Icons</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 50px;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+      width: 200px;
+    }
+
+    .dropdown-selected {
+      background-color: #f4f4f4;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .dropdown-selected svg {
+      margin-right: 10px;
+    }
+
+    .dropdown-options {
+      display: none;
+      position: absolute;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      margin-top: 5px;
+      z-index: 10;
+    }
+
+    .dropdown-option {
+      padding: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .dropdown-option svg {
+      margin-right: 10px;
+    }
+
+    .dropdown-option:hover {
+      background-color: #f0f0f0;
+    }
+
+    .dropdown.active .dropdown-options {
+      display: block;
+    }
+
+    .dropdown-arrow {
+      width: 10px;
+      height: 10px;
+      fill: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="dropdown">
+    <div class="dropdown-selected">
+      <svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7z"/></svg>
+      <span>Select an option</span>
+    </div>
+    <div class="dropdown-options">
+      <div class="dropdown-option" data-value="1">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="blue"/></svg>
+        Option 1
+      </div>
+      <div class="dropdown-option" data-value="2">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 24 24"><rect width="20" height="20" fill="green"/></svg>
+        Option 2
+      </div>
+      <div class="dropdown-option" data-value="3">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 24 24"><polygon points="10,5 19,19 1,19" fill="red"/></svg>
+        Option 3
+      </div>
+    </div>
+  </div>
+  nice
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const dropdown = document.querySelector(".dropdown");
+      const selected = document.querySelector(".dropdown-selected");
+      const options = document.querySelectorAll(".dropdown-option");
+      const arrow = selected.querySelector(".dropdown-arrow");
+
+      // Toggle dropdown visibility
+      selected.addEventListener("click", () => {
+        dropdown.classList.toggle("active");
+      });
+
+      // Handle option selection
+      options.forEach(option => {
+        option.addEventListener("click", () => {
+          const value = option.dataset.value;
+          const text = option.textContent.trim();
+          const svg = option.querySelector("svg").outerHTML;
+
+          selected.innerHTML = `${svg} <span>${text}</span>`;
+          dropdown.classList.remove("active");
+
+          console.log(`Selected value: ${value}`);
+        });
+      });
+
+      // Close dropdown if clicked outside
+      document.addEventListener("click", (e) => {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove("active");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
