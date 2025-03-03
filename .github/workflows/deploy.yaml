@@ -23,4 +23,5 @@ jobs:
         script: |
           cd /var/www/polycoid
           printf '%s' "${{ secrets.ENV }}" > polycoid_main/.env
+          whoami
           ./deploy.sh
