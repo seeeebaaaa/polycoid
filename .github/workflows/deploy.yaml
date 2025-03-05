@@ -24,18 +24,18 @@ jobs:
       run: |
         docker build . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
         docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-  # deploy:
-  #   needs: publish
-  #   name: deploy image
-  #   runs-on: ubuntu-latest
+  deploy:
+    needs: publish
+    name: deploy image
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Deploy to the server
-  #     - uses: appleboy/ssh-action@v0.1.3
-  #       with:
-  #         host: ${{ secrets.SERVER_IP }}
-  #         username: ${{ secrets.SERVER_USER }}
-  #         key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #         port: 22
-  #         script: |
-  #           cd /home/${{ secrets.SERVER_USER }}/polycoid && docker compose pull && docker compose up -d
+    steps:
+      - name: Deploy to the server
+      - uses: appleboy/ssh-action@v0.1.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd /home/${{ secrets.SERVER_USER }}/polycoid && docker compose pull && docker compose up -d
