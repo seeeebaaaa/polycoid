@@ -10,7 +10,7 @@ services:
       - ./.env
     depends_on:
       - postgres_db
-    image: ghcr.io/seeeebaaaa/poylcoid-django:latest  # Updated to use GHCR
+    image: ghcr.io/seeeebaaaa/polycoid-django:latest  # Updated to use GHCR
 
   postgres_db:
     image: postgres
@@ -25,14 +25,11 @@ services:
 
   nginx:
     build: ./nginx
-    # volumes:
-    #   - ./polycoid.com_ssl_certificate.crt.pem:/etc/ssl/public.crt.pem
-    #   - ./*.polycoid.com_private_key.key.pem:/etc/ssl/private.key.pem
     ports:
       - 1337:80
     depends_on:
       - django
-    image: ghcr.io/seeeebaaaa/poylcoid-nginx:latest  # Updated to use GHCR
+    image: ghcr.io/seeeebaaaa/polycoid-nginx:latest  # Updated to use GHCR
 
 volumes:
   postgres_data:
