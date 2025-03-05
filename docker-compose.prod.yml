@@ -25,6 +25,9 @@ services:
 
   nginx:
     build: ./nginx
+    volumes:
+      - ./polycoid.com_ssl_certificate.crt.pem:/etc/ssl/public.crt.pem
+      - ./*.polycoid.com_private_key.key.pem:/etc/ssl/private.key.pem
     ports:
       - 1337:80
     depends_on:
