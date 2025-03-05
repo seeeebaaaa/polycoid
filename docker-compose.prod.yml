@@ -10,6 +10,7 @@ services:
       - ./.env
     depends_on:
       - postgres_db
+    image: ghcr.io/seeeebaaaa/poylcoid-django:latest  # Updated to use GHCR
 
   postgres_db:
     image: postgres
@@ -28,6 +29,7 @@ services:
       - 1337:80
     depends_on:
       - django
+    image: ghcr.io/seeeebaaaa/poylcoid-nginx:latest  # Updated to use GHCR
 
 volumes:
   postgres_data:
