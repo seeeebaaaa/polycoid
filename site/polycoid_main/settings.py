@@ -35,6 +35,11 @@ if DEBUG:
   ALLOWED_HOSTS.append('localhost')
   ALLOWED_HOSTS.append('192.168.178.21')
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://polycoid.com',
+    'https://www.polycoid.com'
+]
+
 
 # Application definition
 
@@ -145,11 +150,10 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-import os
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_ROOT = '/home/site/django/staticfiles'
 
 # for user uploaded content
-MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT =  '/home/site/django/medaifiles'
 MEDIA_URL = '/media/'
 
 

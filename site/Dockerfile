@@ -5,7 +5,7 @@ FROM python:3.12.3
 RUN mkdir -p /home/site
 
 # create the site user
-RUN addgroup --system site && adduser --system --group site
+#RUN addgroup --system site && adduser --system --group site
 
 # create the appropriate directories
 ENV HOME=/home/site
@@ -25,4 +25,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # copy project
 COPY . $SITE_HOME
 
-USER site
+#RUN chown -R site:site $SITE_HOME
+
+#USER site
