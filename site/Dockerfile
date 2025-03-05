@@ -25,4 +25,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # copy project
 COPY . $SITE_HOME
 
+RUN chown -R site:site $SITE_HOME
+
 USER site
