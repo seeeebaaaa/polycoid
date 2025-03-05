@@ -5,6 +5,9 @@ COPY nginx.conf /etc/nginx/conf.d
 
 RUN mkdir /etc/nginx/ssl
 
+RUN ls -l .
+
+
 COPY ./polycoid.com_ssl_certificate.crt.pem /etc/nginx/ssl/public.crt.pem
 COPY ./*.polycoid.com_private_key.key.pem /etc/nginx/ssl/private.key.pem
 
