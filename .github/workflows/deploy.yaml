@@ -43,6 +43,10 @@ jobs:
         run: |
           docker compose -f docker-compose.prod.yml build django
           docker compose -f docker-compose.prod.yml push django
+      - name: Verify SSL certificates
+        run: |
+          ls -l ./polycoid.com_ssl_certificate.crt.pem
+          ls -l ./*.polycoid.com_private_key.key.pem
 
       - name: Build and Push Nginx Image
         run: |
