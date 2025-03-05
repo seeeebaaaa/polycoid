@@ -1,53 +1,31 @@
-name: Deploy Polycoid Website
+name: Deploy Docker image
 
 on:
   push:
     branches:
-      - main
-
-env:
-  # Use docker.io for Docker Hub if empty
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/polycoid_main:latest
+      - master
 
 jobs:
-  publish:
-    name: publish image
+  Deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v3
       - name: Create env file
         run: |
           touch .env
           echo "${{ secrets.SERVER_ENV_PROD }}" > .env
           cat .env
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push Docker image
-        id: push
-        uses: docker/build-push-action@v6
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
         with:
           context: .
-          file: docker-compose.prod.yml
           push: true
-          tags: ${{ env.IMAGE_NAME }}
-  # deploy:
-  #   needs: publish
-  #   name: deploy image
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #   - uses: appleboy/ssh-action@v0.1.3
-  #     with:
-  #       host: ${{ secrets.SERVER_IP }}
-  #       username: ${{ secrets.SERVER_USER }}
-  #       key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #       port: 22
-  #       script: |
-  #         cd /home/${{ secrets.SERVER_USER }}/polycoid && docker compose pull && docker compose up -d
+          tags: |
+            ghcr.io/seeeebaaaa/seeeebaaaa-polycoid:latest
