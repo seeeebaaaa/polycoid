@@ -48,3 +48,22 @@ jobs:
         run: |
           docker compose -f docker-compose.prod.yml build nginx
           docker compose -f docker-compose.prod.yml push nginx
+
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/uwu/polycoid
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ secrets.actor }} --password-stdin
+            docker-compose pull
+            docker-compose down
+            docker-compose up -d
