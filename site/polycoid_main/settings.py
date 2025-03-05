@@ -35,6 +35,11 @@ if DEBUG:
   ALLOWED_HOSTS.append('localhost')
   ALLOWED_HOSTS.append('192.168.178.21')
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://polycoid.com',
+    'https://www.polycoid.com'
+]
+
 
 # Application definition
 
