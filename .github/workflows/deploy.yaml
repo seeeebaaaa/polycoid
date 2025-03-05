@@ -97,3 +97,13 @@ jobs:
             sudo docker compose pull
             sudo docker compose down
             sudo docker compose up -d
+            
+            # Wait for Django container to be healthy
+            echo "Waiting for Django container to be healthy..."
+            while [ "$(sudo docker inspect --format='{{.State.Health.Status}}' django)" != "healthy" ]; do
+                sleep 2
+            done
+
+            echo "Django is healthy, running migrations..."
+            sudo docker compose exec django python3 manage.py migrate
+            sudo docker compose exec django python3 manage.py collectstatic --noinput
