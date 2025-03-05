@@ -1,5 +1,5 @@
 # ssh keys:
-.secret
+*.pem
 
 # cloud config
 config/cloud_init.yaml
