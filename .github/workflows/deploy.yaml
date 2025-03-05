@@ -24,10 +24,10 @@ jobs:
 
       - name: Copy SSL secrets
         run: |
-          touch ./polycoid.com_ssl_certificate.crt.pem 
-          echo "${{ secrets.POLYCOID_SSL_CERTIFICATE }}" > ./polycoid.com_ssl_certificate.crt.pem 
-          touch ./*.polycoid.com_private_key.key.pem
-          echo "${{ secrets.POLYCOID_PRIVATE_KEY }}" > ./*.polycoid.com_private_key.key.pem
+          touch nginx/polycoid.com_ssl_certificate.crt.pem 
+          echo "${{ secrets.POLYCOID_SSL_CERTIFICATE }}" > nginx/polycoid.com_ssl_certificate.crt.pem 
+          touch nginx/*.polycoid.com_private_key.key.pem
+          echo "${{ secrets.POLYCOID_PRIVATE_KEY }}" > nginx/*.polycoid.com_private_key.key.pem
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -43,10 +43,6 @@ jobs:
         run: |
           docker compose -f docker-compose.prod.yml build django
           docker compose -f docker-compose.prod.yml push django
-      - name: Verify SSL certificates
-        run: |
-          ls -l ./polycoid.com_ssl_certificate.crt.pem
-          ls -l ./*.polycoid.com_private_key.key.pem
 
       - name: Build and Push Nginx Image
         run: |
