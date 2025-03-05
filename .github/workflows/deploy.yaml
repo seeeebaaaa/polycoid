@@ -28,10 +28,10 @@ jobs:
 
       - name: Build and Push Django Image
         run: |
-          docker-compose -f docker-compose.prod.yml build django
-          docker-compose -f docker-compose.prod.yml push django
+          docker compose -f docker-compose.prod.yml build django
+          docker compose -f docker-compose.prod.yml push django
 
       - name: Build and Push Nginx Image
         run: |
-          docker-compose -f docker-compose.prod.yml build nginx
-          docker-compose -f docker-compose.prod.yml push nginx
+          docker compose -f docker-compose.prod.yml build nginx
+          docker compose -f docker-compose.prod.yml push nginx
