@@ -30,10 +30,12 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['www.polycoid.com','polycoid.com',env('SERVER_IP')]
+ALLOWED_HOSTS = ['www.polycoid.com','polycoid.com',"filmliste.polycoid.com",env('SERVER_IP')]
 if DEBUG:
   ALLOWED_HOSTS.append('localhost')
+  ALLOWED_HOSTS.append('filmliste.localhost')
   ALLOWED_HOSTS.append('192.168.178.21')
+  print("using debug")
 
 CSRF_TRUSTED_ORIGINS = [
     'https://polycoid.com',
@@ -54,6 +56,7 @@ INSTALLED_APPS = [
     'filmliste.apps.FilmlisteConfig',
     'rest_framework',
     'dj_svg', # adds inline svg template support
+    'django_hosts'
 ]
 
 MIDDLEWARE = [
@@ -67,7 +70,27 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+MIDDLEWARE = [
+    'django_hosts.middleware.HostsRequestMiddleware',
+    *MIDDLEWARE,  # Keep existing middleware
+    'django_hosts.middleware.HostsResponseMiddleware',
+]
+
 ROOT_URLCONF = 'polycoid_main.urls'
+
+ROOT_HOSTCONF = 'polycoid_main.hosts'
+DEFAULT_HOST = 'www'  # Default to polycoid.com
+
+if DEBUG:
+    HOST_SCHEME = 'http'
+else:
+    HOST_SCHEME = 'https'
+
+if DEBUG:
+    PARENT_HOST = 'localhost:8000'
+else:
+    PARENT_HOST = 'polycoid.com'
+
 
 TEMPLATES = [
     {
@@ -81,6 +104,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'builtins':[
+              'django_hosts.templatetags.hosts_override'
+            ]
         },
     },
 ]
