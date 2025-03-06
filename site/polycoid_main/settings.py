@@ -81,6 +81,16 @@ ROOT_URLCONF = 'polycoid_main.urls'
 ROOT_HOSTCONF = 'polycoid_main.hosts'
 DEFAULT_HOST = 'www'  # Default to polycoid.com
 
+if DEBUG:
+    HOST_SCHEME = 'http'
+else:
+    HOST_SCHEME = 'https'
+
+if DEBUG:
+    PARENT_HOST = 'localhost:8000'
+else:
+    PARENT_HOST = 'polycoid.com'
+
 
 TEMPLATES = [
     {
