@@ -21,9 +21,9 @@
     <script>
       const CSRF_TOKEN = '{{ csrf_token }}';
       const FILMLISTE = { 
-        addlist: "{% url 'filmliste:add-list' %}", 
-        discoverLists:"{% url 'filmliste:discover-lists' %}",
-        listDetails: "{% url 'filmliste:list-details' 0 %}"
+        addlist: "{% url 'filmliste:add-list' host 'filmliste' %}", 
+        discoverLists:"{% url 'filmliste:discover-lists' host 'filmliste' %}",
+        listDetails: "{% url 'filmliste:list-details' host 'filmliste' 0 %}"
       };
       const userIs_authenticated =  '{{ user.is_authenticated }}'=="True"?true:false;
     </script>
@@ -84,13 +84,13 @@
               Logged in as <span>{{ user.username }}</span>
             </div>
             <div>
-            <a href="{% url 'filmliste:logout' %}" class="logout">
+            <a href="{% url 'filmliste:logout' host 'filmliste' %}" class="logout">
               Logout
             </a>
           </div>
           </div>
           {% else %}
-          <a href="{% url 'filmliste:login' %}" class="login">
+          <a href="{% url 'filmliste:login' host 'filmliste' %}" class="login">
             Log in
           </a>
           {% endif %}

@@ -23,7 +23,7 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="Index"),
-    path("filmliste/", include("filmliste.urls"))
+    #path("filmliste/", include("filmliste.urls")) # see hosts.py
 ]
 
 if settings.DEBUG:
