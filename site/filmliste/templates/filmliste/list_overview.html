@@ -1,4 +1,4 @@
-{% load static %} {% load svg %} {% load title_card_colors %} {% load hosts %}
+{% load static %} {% load svg %} {% load title_card_colors %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -99,7 +99,7 @@
           </div>
           </div>
           {% else %}
-          <a href="{% host_url 'login' host 'filmliste' %}" class="login">
+          <a href="{% url 'login' host 'filmliste' %}" class="login">
             Log in
           </a>
           {% endif %}
