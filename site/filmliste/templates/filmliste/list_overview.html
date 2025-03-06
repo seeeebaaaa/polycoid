@@ -21,9 +21,9 @@
     <script>
       const CSRF_TOKEN = '{{ csrf_token }}';
       const FILMLISTE = { 
-        addlist: "{% url 'filmliste:add-list' host 'filmliste' %}", 
-        discoverLists:"{% url 'filmliste:discover-lists' host 'filmliste' %}",
-        listDetails: "{% url 'filmliste:list-details' host 'filmliste' 0 %}"
+        addlist: "{% url 'add-list' host 'filmliste' %}", 
+        discoverLists:"{% url 'discover-lists' host 'filmliste' %}",
+        listDetails: "{% url 'list-details' 0 host 'filmliste' %}"
       };
       const userIs_authenticated =  '{{ user.is_authenticated }}'=="True"?true:false;
     </script>
@@ -93,13 +93,13 @@
               Logged in as <span>{{ user.username }}</span>
             </div>
             <div>
-            <a href="{% url 'filmliste:logout' ost 'filmliste' %}" class="logout">
+            <a href="{% url 'logout' host 'filmliste' %}" class="logout">
               Logout
             </a>
           </div>
           </div>
           {% else %}
-          <a href="{% url 'filmliste:login' host 'filmliste' %}" class="login">
+          <a href="{% url 'login' host 'filmliste' %}" class="login">
             Log in
           </a>
           {% endif %}
@@ -147,7 +147,7 @@
           {% if lists %}
           <div class="card-container">
             {% for list in lists %}
-            <a href="{% url 'filmliste:list-details' host 'filmliste' list.id %}" tabindex="0">
+            <a href="{% url 'list-details' list.id host 'filmliste' %}" tabindex="0">
               <div class="title-card" data-colors="{{ list|colorsJSON|escape }}">
                 <div class="text">
                   {{ list.title|escape }}
