@@ -1,6 +1,5 @@
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
-from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.contrib.auth.tokens import default_token_generator
 from django_hosts.resolvers import reverse
@@ -13,9 +12,7 @@ from PIL import Image
 def send_verification_email(request, user):
     token = default_token_generator.make_token(user)
     uid = urlsafe_base64_encode(force_bytes(user.pk))
-    current_site = get_current_site(request)
-    verification_link = reverse('verify_email',host="filmliste", kwargs={'uidb64': uid, 'token': token})
-    verification_url = f"https://{current_site.domain}{verification_link}"
+    verification_url = reverse('verify_email',host="filmliste", kwargs={'uidb64': uid, 'token': token})
 
     subject = "Filmliste - Verify your email"
     message = render_to_string("filmliste/email_verification.html", {
