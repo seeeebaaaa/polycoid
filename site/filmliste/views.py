@@ -11,6 +11,7 @@ from .utils import send_verification_email
 from django.contrib.auth.decorators import login_required
 from .forms import ProfilePictureForm
 from .models import List
+from django_hosts.resolvers import reverse
 
 User = get_user_model()
 
@@ -43,7 +44,7 @@ def login_view(request):
                     # check for mail verification status
                     if user.is_verified:
                         login(request, user)
-                        return redirect("filmliste:index")
+                        return redirect(reverse("index", host="filmliste"))
                     else:
                         messages.error(
                             request, "Account not verified. Check your mails.")
@@ -83,14 +84,14 @@ def verify_email(request, uidb64, token):
         messages.success(
             request, "Email verified successfully. You are now logged in.")
         login(request,user)
-        return redirect("filmliste:index")
+        return redirect(reverse("index", host="filmliste"))
     else:
         messages.error(request, "Invalid or expired verification link.")
-        return redirect("filmliste:login")
+        return redirect(reverse("login", host="filmliste"))
 
 def logout_view(request):
     logout(request)
-    return redirect("filmliste:index")
+    return redirect(reverse("index", host="filmliste"))
 
 
 def list_detail(request, list_id):
@@ -104,7 +105,7 @@ def upload_profile_picture(request):
         form = ProfilePictureForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('filmliste:index')  # Redirect to the user's profile page
+            return redirect(reverse("index", host="filmliste"))  # Redirect to the user's profile page
     else:
         form = ProfilePictureForm(instance=request.user)
 

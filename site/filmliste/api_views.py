@@ -6,6 +6,7 @@ from .serializers import ListSerializer, DiscoverListsSerializer
 from django.shortcuts import redirect
 from .models import List
 from django.db.models import Q
+from django_hosts.resolvers import reverse
 
 @api_view(['POST'])
 def button_test_press(request):
@@ -21,7 +22,7 @@ def add_list(request):
     serializer = ListSerializer(data=request.data)
     if serializer.is_valid():
         list = serializer.save(created_by=request.user)
-        return redirect("filmliste:index")
+        return redirect(reverse("index", host="filmliste"))
     return Response(serializer.errors, status=400)
 
 
