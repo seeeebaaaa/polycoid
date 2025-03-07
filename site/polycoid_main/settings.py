@@ -87,10 +87,7 @@ if DEBUG:
 else:
     HOST_SCHEME = 'https'
 
-if DEBUG:
-    PARENT_HOST = 'localhost:8000'
-else:
-    PARENT_HOST = 'polycoid.com'
+PARENT_HOST = env("PARENT_HOST")
 
 
 TEMPLATES = [
