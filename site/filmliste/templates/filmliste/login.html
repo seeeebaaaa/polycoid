@@ -77,26 +77,6 @@
           </div>
         </div>
       </div>
-      {% comment %}
-      {% if messages %}
-        <ul>
-          {% for message in messages %}
-            <li>{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}Login<form action="{% url 'filmliste:login' %}" method="post">
-        {% csrf_token %}
-        {{ login.as_p }}
-        <input type="submit" value="Ok" />
-      </form>
-      <br />
-      Register/Signup<form action="{% url 'filmliste:login' %}" method="post">
-        {% csrf_token %}
-        {{ signup.as_p }}
-        <input type="submit" value="Ok" />
-      </form> 
-      {% endcomment %}
-
     </div>
   </body>
 </html>
