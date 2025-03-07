@@ -3,7 +3,7 @@ services:
     build: ./site
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./site/:/usr/src/site/
+      - ./site/:/home/site/django
     ports:
       - 8000:8000
     env_file:
