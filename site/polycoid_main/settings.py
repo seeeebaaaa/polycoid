@@ -39,7 +39,8 @@ if DEBUG:
 
 CSRF_TRUSTED_ORIGINS = [
     'https://polycoid.com',
-    'https://www.polycoid.com'
+    'https://www.polycoid.com',
+    "https://filmliste.polycoid.com"
 ]
 
 
