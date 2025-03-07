@@ -30,7 +30,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['www.polycoid.com','polycoid.com',"filmliste.polycoid.com",env('SERVER_IP')]
+ALLOWED_HOSTS = ['www.polycoid.com','polycoid.com',"filmliste.polycoid.com",env('SERVER_IP'),"0.0.0.0"] # use 0.0.0.0 cause nginx access at 0.0.0.0:8000
 if DEBUG:
   ALLOWED_HOSTS.append('localhost')
   ALLOWED_HOSTS.append('filmliste.localhost')
