@@ -1,9 +1,9 @@
 asgiref
-Django==5.0.10
-gunicorn==22.0.0
-packaging==24.1
-psycopg2-binary==2.9.9
-sqlparse==0.5.1
+Django
+gunicorn
+packaging
+psycopg2-binary
+sqlparse
 django-environ
 djangorestframework
 django-cors-headers
