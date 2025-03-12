@@ -163,9 +163,91 @@ def resize_profile_picture(sender, instance, **kwargs):
         resize_image(instance.profile_picture.path)
 
 
-# List model
+
+    
+
+
+class Genre(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.name
+
+class Collection(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    overview = models.TextField(null=True, blank=True)
+    poster_path = models.CharField(max_length=255, null=True, blank=True)
+    backdrop_path = models.CharField(max_length=255, null=True, blank=True)
+    
+    def get_movies(self):
+        return Movie.objects.filter(belongs_to_collection=self)
+
+    def __str__(self):
+        return self.name
+
+class Movie(models.Model):
+    id = models.AutoField(primary_key=True)
+    backdrop_path = models.CharField(max_length=255, null=True, blank=True)
+    belongs_to_collection = models.ForeignKey(Collection, on_delete=models.SET_NULL, null=True, blank=True)
+    title = models.CharField(max_length=255)
+    overview = models.TextField()
+    release_date = models.DateField()
+    runtime = models.IntegerField()
+    popularity = models.FloatField()
+    poster_path = models.CharField(max_length=255, null=True, blank=True)
+    tagline = models.CharField(max_length=255, null=True, blank=True)
+    genres = models.ManyToManyField(Genre)
+    
+    def __str__(self):
+        return self.title
+
+class TVSeries(models.Model):
+    id = models.AutoField(primary_key=True)
+    backdrop_path = models.CharField(max_length=255, null=True, blank=True)
+    first_air_date = models.DateField()
+    genres = models.ManyToManyField(Genre)
+    last_air_date = models.DateField(null=True, blank=True)
+    name = models.CharField(max_length=255)
+    number_of_seasons = models.IntegerField(default=0)
+    number_of_episodes = models.IntegerField(default=0)
+    overview = models.TextField()
+    popularity = models.FloatField()
+    poster_path = models.CharField(max_length=255, null=True, blank=True)
+    tagline = models.CharField(max_length=255, null=True, blank=True)
+    
+    def __str__(self):
+        return self.name
+
+class TVSeason(models.Model):
+    id = models.AutoField(primary_key=True)
+    air_date = models.DateField(null=True, blank=True)
+    name = models.CharField(max_length=255)
+    overview = models.TextField()
+    poster_path = models.CharField(max_length=255, null=True, blank=True)
+    season_number = models.IntegerField()
+    tv_series = models.ForeignKey(TVSeries, related_name='seasons', on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f"{self.tv_series.name} - Season {self.season_number}"
+
+class TVEpisode(models.Model):
+    id = models.AutoField(primary_key=True)
+    episode_number = models.IntegerField()
+    name = models.CharField(max_length=255)
+    overview = models.TextField()
+    runtime = models.IntegerField(null=True, blank=True)
+    season_number = models.IntegerField()
+    still_path = models.CharField(max_length=255, null=True, blank=True)
+    season = models.ForeignKey(TVSeason, related_name='episodes', on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f"{self.season.tv_series.name} - S{self.season_number}E{self.episode_number} - {self.name}"
+    
 
 class List(models.Model):
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=30)
     created_by = models.ForeignKey(
         CustomUser,
@@ -179,6 +261,8 @@ class List(models.Model):
         related_name='shared_lists',
         blank=True
     )
+    movies = models.ManyToManyField(Movie, blank=True)
+    tv_series = models.ManyToManyField(TVSeries, blank=True)
     
     # Save titlecard colors + position to recreate radial gradient combo
     colors = models.JSONField(default=list, blank=True)

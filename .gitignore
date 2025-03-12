@@ -20,3 +20,6 @@ config/cloud_init.yaml
 
 # test files:
 test_**
+
+# migrations
+**/migrations/** 

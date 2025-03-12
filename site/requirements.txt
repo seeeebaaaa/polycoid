@@ -10,3 +10,4 @@ django-cors-headers
 dj_svg
 Pillow
 django-hosts
+tmdbsimple
