@@ -18,5 +18,7 @@ urlpatterns = [
     #  api views
     path("api/button-test-press",api_views.button_test_press,name="button"),
     path("api/add-list",api_views.add_list,name="add-list"),
-    path("api/discover-lists",api_views.discover_lists,name="discover-lists")
+    path("api/discover-lists",api_views.discover_lists,name="discover-lists"),
+    path("api/search",api_views.search_preview,name="search-preview"),
+    path("api/details/title",api_views.get_details_title,name="get-details-title"),
 ]

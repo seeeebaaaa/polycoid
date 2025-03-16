@@ -158,7 +158,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 @receiver(post_save, sender=CustomUser)
 def resize_profile_picture(sender, instance, **kwargs):
-    """Signal to resize the profile picture after the user object is saved."""
+    """sSignal to resize the profile picture after the user object is saved."""
     if instance.profile_picture:
         resize_image(instance.profile_picture.path)
 

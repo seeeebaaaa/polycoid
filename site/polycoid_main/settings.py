@@ -202,3 +202,8 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.AnonRateThrottle',
     ],
 }
+
+
+# set tmdb api key for all imports
+import tmdbsimple as tmdb
+tmdb.API_KEY = env('TMDB_API_KEY')

@@ -7,7 +7,6 @@ from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
 from PIL import Image
 
-
 # Function to send email verification
 def send_verification_email(request, user):
     token = default_token_generator.make_token(user)
