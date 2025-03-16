@@ -56,6 +56,13 @@ class MovieSerializer(serializers.ModelSerializer):
         ]
 
 
+class CollectionWithPartsSerializer(serializers.ModelSerializer):
+    parts = MovieSerializer(source="movie_set",many=True, read_only=True)
+    class Meta:
+        model = Collection
+        fields = ['id', 'name', 'overview', 'poster_path', 'backdrop_path', 'parts']
+
+
 class TVEpisodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TVEpisode

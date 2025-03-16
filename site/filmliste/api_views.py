@@ -3,14 +3,13 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from time import sleep
 from rest_framework.permissions import IsAuthenticated
-from .serializers import ListSerializer, DiscoverListsSerializer, MovieSerializer, TVSeriesSerializer
+from .serializers import ListSerializer, DiscoverListsSerializer, MovieSerializer, TVSeriesSerializer, CollectionWithPartsSerializer
 from django.shortcuts import redirect
 from .models import List, Movie, Genre, Collection, TVSeries, TVSeason, TVEpisode
 from django.db.models import Q
 from django_hosts.resolvers import reverse
 import tmdbsimple as tmdb
-from datetime import datetime
-from .tmdb_utils import tmdb_catch, genres_get_or_create
+from .tmdb_utils import tmdb_catch, genres_get_or_create, movie_get_or_create
 
 @api_view(["POST"])
 def button_test_press(request):
@@ -47,7 +46,7 @@ def discover_lists(request):
 
 
 @api_view(["GET"])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def search_preview(request: Request):
     """This uses the tmdb search/multi and search/collection to list titles to the users"""
     query = request.query_params.get("query", "")
@@ -67,7 +66,7 @@ def search_preview(request: Request):
 
 
 @api_view(["GET"])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def get_details_title(request: Request):
     # id of media
     media_id: str = request.query_params.get("id", "")
@@ -86,57 +85,7 @@ def get_details_title(request: Request):
 
     # TODO: try/catch for tmdb query if id not exisitng (404 error)
     if media_type == "movie":
-        # try db first, then tmdb
-        movie_qs = Movie.objects.filter(id=media_id)
-        if movie_qs.exists():
-            movie = movie_qs[0]  # there can only be one, cause id is pk
-        else:
-            # query from tmdb instead and create db entry
-            req_movie = tmdb.Movies(id=media_id)
-            details = tmdb_catch(req_movie.info)
-            if not details:
-                return Response({"error":"Invalid Movie ID"},status=404)
-            print(details)
-            # create movie db record
-            movie = Movie(
-                id=details["id"],
-                backdrop_path=details["backdrop_path"],
-                title=details["title"],
-                overview=details["overview"],
-                release_date=datetime.strptime(
-                    details["release_date"], "%Y-%m-%d"
-                ).date(),  # parse to date format
-                runtime=details["runtime"],
-                popularity=details["popularity"],
-                poster_path=details["poster_path"],
-                tagline=details["tagline"],
-            )
-
-            # get/create genres
-            genres = genres_get_or_create(details["genres"])
-
-            # create collection unless it exists already
-            c = details["belongs_to_collection"]
-            if not Collection.objects.filter(id=c["id"]).exists():
-                info = tmdb_catch(tmdb.Collections(c["id"]).info)
-                if not info:
-                    return Response({"error":"Invalid Collection ID"},status=404)
-                collection = Collection(
-                    id=info["id"],
-                    name=info["name"],
-                    overview=info["overview"],
-                    poster_path=info["poster_path"],
-                    backdrop_path=info["backdrop_path"],
-                )
-                collection.save()
-            else:
-                collection = Collection.objects.filter(id=c["id"])[0]
-
-            # needs to be saved before attaching relations
-            movie.save()
-            movie.genres.set(genres)
-            movie.belongs_to_collection = collection
-            movie.save()
+        movie = movie_get_or_create(media_id)
         
         # check if titles match
         if not movie.title==media_title:
@@ -220,6 +169,35 @@ def get_details_title(request: Request):
         serialized_tv_series = TVSeriesSerializer(tv_series)
         return Response(serialized_tv_series.data,status=200)
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_details_collection(request:Request):
+    # id of collection
+    collection_id: str = request.query_params.get("id", "")
+    if not collection_id and not collection_id.isdigit():
+        return Response({"error": "Bad Collection ID"}, status=400)
+    collection_id: int = int(collection_id)
 
-def get_details_collection(request):
-    return Response(status=200)
+    collection_qs = Collection.objects.filter(id=collection_id)
+    if collection_qs.exists():
+        collection = collection_qs[0]
+    else:
+        info = tmdb_catch(tmdb.Collections(id=collection_id).info)
+        collection = Collection(
+                    id=info["id"],
+                    name=info["name"],
+                    overview=info["overview"],
+                    poster_path=info["poster_path"],
+                    backdrop_path=info["backdrop_path"],
+                )
+        collection.save()
+        # create all movies based on parts, if not existend
+        for part in info["parts"]:
+            if not part["media_type"]=="movie":
+                return Response({"error":"TV Collections are not supported."})
+            movie = movie_get_or_create(part["id"],create_collection=False)
+            movie.belongs_to_collection = collection
+            movie.save()
+
+    serialized_collection = CollectionWithPartsSerializer(collection)
+    return Response(serialized_collection.data,status=200)

@@ -21,4 +21,5 @@ urlpatterns = [
     path("api/discover-lists",api_views.discover_lists,name="discover-lists"),
     path("api/search",api_views.search_preview,name="search-preview"),
     path("api/details/title",api_views.get_details_title,name="get-details-title"),
+    path("api/details/collection",api_views.get_details_collection,name="get-details-collection"),
 ]
