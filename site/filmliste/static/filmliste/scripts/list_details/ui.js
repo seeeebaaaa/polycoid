@@ -143,7 +143,7 @@ $(document).ready(_ => {
    * Profile Box
    * ===========
   \*/
-  $('.nav>.profile>.symbol>button').on("click", event => {
+  $('.nav .profile>.symbol>button').on("click", event => {
     $(".profile-box").toggleClass("hidden")
     $(".bg-shadow#profile_box").toggleClass("hidden")
   })

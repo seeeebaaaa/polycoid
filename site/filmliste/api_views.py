@@ -16,7 +16,7 @@ from django.db.models import Q
 from django_hosts.resolvers import reverse
 import tmdbsimple as tmdb
 from .tmdb_utils import tmdb_catch, genres_get_or_create, movie_get_or_create
-
+from django.utils.timezone import now
 
 @api_view(["POST"])
 def button_test_press(request):
@@ -68,7 +68,7 @@ def search_preview(request: Request):
     found_collections = search_obj.collection(query=query)
 
     return Response(
-        {"titles": found_titles, "collections": found_collections}, status=200
+        {"titles": found_titles, "collections": found_collections["results"]}, status=200
     )
 
 

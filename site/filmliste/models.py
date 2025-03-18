@@ -1,6 +1,10 @@
 # models.py
 from typing import Iterable
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+)
 from django.db import models
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils import timezone
@@ -12,6 +16,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from .utils import resize_image
 from django.core.exceptions import ValidationError
+from django.utils.timezone import now
 
 
 class CustomUserManager(BaseUserManager):
@@ -109,8 +114,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
-        help_text=_(
-            "Designates whether the user can log into this admin site."),
+        help_text=_("Designates whether the user can log into this admin site."),
     )
     is_active = models.BooleanField(
         _("active"),
@@ -123,17 +127,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_verified = models.BooleanField(
         _("verified"),
         default=False,
-        help_text=_(
-            "Shows if this user varified their email. "
-        ),
+        help_text=_("Shows if this user varified their email. "),
     )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
 
     profile_picture = models.ImageField(
-        upload_to='filmliste/profile_pictures/',
+        upload_to="filmliste/profile_pictures/",
         blank=True,
         null=True,
-        help_text=_("Upload a profile picture.")
+        help_text=_("Upload a profile picture."),
     )
 
     objects = CustomUserManager()
@@ -163,16 +165,13 @@ def resize_profile_picture(sender, instance, **kwargs):
         resize_image(instance.profile_picture.path)
 
 
-
-    
-
-
 class Genre(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
-    
+
     def __str__(self):
         return self.name
+
 
 class Collection(models.Model):
     id = models.AutoField(primary_key=True)
@@ -180,17 +179,20 @@ class Collection(models.Model):
     overview = models.TextField(null=True, blank=True)
     poster_path = models.CharField(max_length=255, null=True, blank=True)
     backdrop_path = models.CharField(max_length=255, null=True, blank=True)
-    
+
     def get_movies(self):
         return Movie.objects.filter(belongs_to_collection=self)
 
     def __str__(self):
         return self.name
 
+
 class Movie(models.Model):
     id = models.AutoField(primary_key=True)
     backdrop_path = models.CharField(max_length=255, null=True, blank=True)
-    belongs_to_collection = models.ForeignKey(Collection, on_delete=models.SET_NULL, null=True, blank=True)
+    belongs_to_collection = models.ForeignKey(
+        Collection, on_delete=models.SET_NULL, null=True, blank=True
+    )
     title = models.CharField(max_length=255)
     overview = models.TextField()
     release_date = models.DateField()
@@ -199,9 +201,10 @@ class Movie(models.Model):
     poster_path = models.CharField(max_length=255, null=True, blank=True)
     tagline = models.CharField(max_length=255, null=True, blank=True)
     genres = models.ManyToManyField(Genre)
-    
+
     def __str__(self):
         return self.title
+
 
 class TVSeries(models.Model):
     id = models.AutoField(primary_key=True)
@@ -216,9 +219,10 @@ class TVSeries(models.Model):
     popularity = models.FloatField()
     poster_path = models.CharField(max_length=255, null=True, blank=True)
     tagline = models.CharField(max_length=255, null=True, blank=True)
-    
+
     def __str__(self):
         return self.name
+
 
 class TVSeason(models.Model):
     id = models.AutoField(primary_key=True)
@@ -227,10 +231,13 @@ class TVSeason(models.Model):
     overview = models.TextField()
     poster_path = models.CharField(max_length=255, null=True, blank=True)
     season_number = models.IntegerField()
-    tv_series = models.ForeignKey(TVSeries, related_name='seasons', on_delete=models.CASCADE)
-    
+    tv_series = models.ForeignKey(
+        TVSeries, related_name="seasons", on_delete=models.CASCADE
+    )
+
     def __str__(self):
         return f"{self.tv_series.name} - Season {self.season_number}"
+
 
 class TVEpisode(models.Model):
     id = models.AutoField(primary_key=True)
@@ -240,11 +247,13 @@ class TVEpisode(models.Model):
     runtime = models.IntegerField(null=True, blank=True)
     season_number = models.IntegerField()
     still_path = models.CharField(max_length=255, null=True, blank=True)
-    season = models.ForeignKey(TVSeason, related_name='episodes', on_delete=models.CASCADE)
-    
+    season = models.ForeignKey(
+        TVSeason, related_name="episodes", on_delete=models.CASCADE
+    )
+
     def __str__(self):
         return f"{self.season.tv_series.name} - S{self.season_number}E{self.episode_number} - {self.name}"
-    
+
 
 class List(models.Model):
     id = models.AutoField(primary_key=True)
@@ -254,30 +263,70 @@ class List(models.Model):
         on_delete=models.CASCADE,
         related_name="own_lists",
         null=False,
-        blank=False
+        blank=False,
     )
-    users = models.ManyToManyField(
-        CustomUser,
-        related_name='shared_lists',
-        blank=True
-    )
+    users = models.ManyToManyField(CustomUser, related_name="shared_lists", blank=True)
     movies = models.ManyToManyField(Movie, blank=True)
     tv_series = models.ManyToManyField(TVSeries, blank=True)
-    
+
     # Save titlecard colors + position to recreate radial gradient combo
     colors = models.JSONField(default=list, blank=True)
+
     def clean_colors(self):
         if not isinstance(self.colors, list) or len(self.colors) < 2:
-            raise ValidationError("The Color field must contain at least two dictionaries.")
+            raise ValidationError(
+                "The Color field must contain at least two dictionaries."
+            )
 
         for entry in self.colors:
             if not isinstance(entry, dict):
                 raise ValidationError("Each item in Color must be a dictionary.")
-            
+
             for key, value in entry.items():
                 if not isinstance(value, (int, float)):
-                    raise ValidationError(f"Value for '{key}' must be an integer or float.")
+                    raise ValidationError(
+                        f"Value for '{key}' must be an integer or float."
+                    )
 
     def save(self, **kwargs):
         self.clean_colors()
         return super().save(**kwargs)
+
+
+class WatchAction(models.TextChoices):
+    WATCHED = "watched", "Watched"  # has fully watched the movie/episode
+    STARTED = "started", "Started"  # has started watching the tile/episode
+
+
+class UserWatchHistory(models.Model):
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name="watch_history"
+    )
+    movie = models.ForeignKey(
+        Movie,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="watch_history",
+    )
+    episode = models.ForeignKey(
+        TVEpisode,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="watch_history",
+    )
+    time = models.DateTimeField(default=now())
+    action = models.CharField(
+        max_length=10, choices=WatchAction.choices, default=WatchAction.WATCHED
+    )
+
+    class Meta:
+        ordering = ["-time"]  # Show most recent watches first
+
+    def __str__(self):
+        if self.movie:
+            return f"{self.user.username} watched {self.movie.title}"
+        elif self.episode:
+            return f"{self.user.username} watched {self.episode.season.tv_series.name} S{self.episode.season_number}E{self.episode.episode_number}"
+        return f"{self.user.username} watch entry"
