@@ -739,3 +739,27 @@ body .bg-shadow {
   background-color: rgba(0, 0, 0, 0.624);
   z-index: 75;
 }
+
+/*\
+ *
+ * ==============
+ * MEDIA TV POPUP
+ * ==============
+ *
+\*/
+.popup-media-tv {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  background: var(--c-bg);
+  max-width: 80vw;
+  width: 60em;
+  max-height: 40em;
+  font-size: 1.1em;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--b-corner);
+}

@@ -11,12 +11,27 @@ from .serializers import (
     CollectionWithPartsSerializer,
 )
 from django.shortcuts import redirect
-from .models import List, Movie, Genre, Collection, TVSeries, TVSeason, TVEpisode
+from .models import (
+    List,
+    Movie,
+    Genre,
+    Collection,
+    TVSeries,
+    TVSeason,
+    TVEpisode,
+    WatchProvider,
+)
 from django.db.models import Q
 from django_hosts.resolvers import reverse
 import tmdbsimple as tmdb
-from .tmdb_utils import tmdb_catch, genres_get_or_create, movie_get_or_create
+from .tmdb_utils import (
+    tmdb_catch,
+    genres_get_or_create,
+    movie_get_or_create,
+    set_providers,
+)
 from django.utils.timezone import now
+
 
 @api_view(["POST"])
 def button_test_press(request):
@@ -68,7 +83,8 @@ def search_preview(request: Request):
     found_collections = search_obj.collection(query=query)
 
     return Response(
-        {"titles": found_titles, "collections": found_collections["results"]}, status=200
+        {"titles": found_titles, "collections": found_collections["results"]},
+        status=200,
     )
 
 
@@ -135,16 +151,20 @@ def get_details_title(request: Request):
             genres = genres_get_or_create(info["genres"])
 
             tv_series.genres.set(genres)
+
+            # set providers
+            set_providers(req_series.watch_providers, tv_series, watch_region="DE")
+
+            # save genre and provider changes
             tv_series.save()
 
             # create all seasons + episodes
             for detail_season in info["seasons"]:
                 # get season + episode info
-                season_info = tmdb_catch(
-                    tmdb.TV_Seasons(
-                        tv_id=tv_series.id, season_number=detail_season["season_number"]
-                    ).info
+                req_season = tmdb.TV_Seasons(
+                    tv_id=tv_series.id, season_number=detail_season["season_number"]
                 )
+                season_info = tmdb_catch(req_season.info)
                 if not season_info:
                     return Response({"error": "Invalid Season ID"}, status=404)
 

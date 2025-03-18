@@ -173,6 +173,16 @@ class Genre(models.Model):
         return self.name
 
 
+class WatchProvider(models.Model):
+    provider_id = models.AutoField(primary_key=True)
+    provider_name = models.CharField(max_length=100)
+    logo_path = models.CharField(max_length=255, null=True, blank=True)
+    display_priority = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.provider_name
+
+
 class Collection(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
@@ -201,6 +211,15 @@ class Movie(models.Model):
     poster_path = models.CharField(max_length=255, null=True, blank=True)
     tagline = models.CharField(max_length=255, null=True, blank=True)
     genres = models.ManyToManyField(Genre)
+    providers_flatrate = models.ManyToManyField(
+        WatchProvider, related_name="movie_providers_flatrate", blank=True
+    )
+    providers_rent = models.ManyToManyField(
+        WatchProvider, related_name="movie_providers_rent", blank=True
+    )
+    providers_buy = models.ManyToManyField(
+        WatchProvider, related_name="movie_providers_buy", blank=True
+    )
 
     def __str__(self):
         return self.title
@@ -219,6 +238,15 @@ class TVSeries(models.Model):
     popularity = models.FloatField()
     poster_path = models.CharField(max_length=255, null=True, blank=True)
     tagline = models.CharField(max_length=255, null=True, blank=True)
+    providers_flatrate = models.ManyToManyField(
+        WatchProvider, related_name="tv_series_providers_flatrate", blank=True
+    )
+    providers_rent = models.ManyToManyField(
+        WatchProvider, related_name="tv_series_providers_rent", blank=True
+    )
+    providers_buy = models.ManyToManyField(
+        WatchProvider, related_name="tv_series_providers_buy", blank=True
+    )
 
     def __str__(self):
         return self.name
@@ -234,7 +262,15 @@ class TVSeason(models.Model):
     tv_series = models.ForeignKey(
         TVSeries, related_name="seasons", on_delete=models.CASCADE
     )
-
+    # providers_flatrate = models.ManyToManyField(
+    #     WatchProvider, related_name="tv_season_providers_flatrate", blank=True
+    # )
+    # providers_rent = models.ManyToManyField(
+    #     WatchProvider, related_name="tv_season_providers_rent", blank=True
+    # )
+    # providers_buy = models.ManyToManyField(
+    #     WatchProvider, related_name="tv_season_providers_buy", blank=True
+    # )
     def __str__(self):
         return f"{self.tv_series.name} - Season {self.season_number}"
 
@@ -295,7 +331,7 @@ class List(models.Model):
 
 class WatchAction(models.TextChoices):
     WATCHED = "watched", "Watched"  # has fully watched the movie/episode
-    STARTED = "started", "Started"  # has started watching the tile/episode
+    STARTED = "started", "Started"  # has started watching the tile/episod
 
 
 class UserWatchHistory(models.Model):
@@ -316,7 +352,7 @@ class UserWatchHistory(models.Model):
         blank=True,
         related_name="watch_history",
     )
-    time = models.DateTimeField(default=now())
+    time = models.DateTimeField(default=now)
     action = models.CharField(
         max_length=10, choices=WatchAction.choices, default=WatchAction.WATCHED
     )

@@ -1,14 +1,14 @@
 from requests.exceptions import HTTPError
-from .models import Genre, Movie, Collection
+from .models import Genre, Movie, Collection, WatchProvider
 import tmdbsimple as tmdb
 from rest_framework.response import Response
 from datetime import datetime
 
 
-def tmdb_catch(endpoint):
+def tmdb_catch(endpoint,**kwargs):
     """Returns None if 404 or any other error, else just reponse"""
     try:
-        result = endpoint()
+        result = endpoint(**kwargs)
         return result
     except HTTPError as e:
         return None
@@ -87,3 +87,14 @@ def movie_get_or_create(movie_id: int,create_collection:bool=True):
             movie.belongs_to_collection = collection
             movie.save()
     return movie
+
+
+def set_providers(endpoint,media_object,watch_region:str='DE'):
+    providers = tmdb_catch(endpoint,watch_region=watch_region)
+    region_providers = providers["results"][watch_region]
+    id_list_flatrate = [provider["flatrate"]["provider_id"] for provider in region_providers]
+    id_list_buy = [provider["buy"]["provider_id"] for provider in region_providers]
+    id_list_rent = [provider["rent"]["provider_id"] for provider in region_providers]
+    media_object.providers_flatrate.set(WatchProvider.objects.filter(provider_id__in=id_list_flatrate))
+    media_object.providers_buy.set(WatchProvider.objects.filter(provider_id__in=id_list_buy))
+    media_object.providers_rent.set(WatchProvider.objects.filter(provider_id__in=id_list_rent))
