@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from datetime import datetime
 
 
-def tmdb_catch(endpoint,**kwargs):
+def tmdb_catch(endpoint, **kwargs):
     """Returns None if 404 or any other error, else just reponse"""
     try:
         result = endpoint(**kwargs)
@@ -33,7 +33,7 @@ def genres_get_or_create(genres_list: list[dict]):
     return genres
 
 
-def movie_get_or_create(movie_id: int,create_collection:bool=True):
+def movie_get_or_create(movie_id: int, create_collection: bool = True):
     # try db first, then tmdb
     movie_qs = Movie.objects.filter(id=movie_id)
     if movie_qs.exists():
@@ -64,6 +64,8 @@ def movie_get_or_create(movie_id: int,create_collection:bool=True):
         genres = genres_get_or_create(details["genres"])
         movie.save()
         movie.genres.set(genres)
+        # add providers
+        set_providers(req_movie.watch_providers, movie, watch_region="DE")
         movie.save()
 
         if create_collection:
@@ -89,12 +91,28 @@ def movie_get_or_create(movie_id: int,create_collection:bool=True):
     return movie
 
 
-def set_providers(endpoint,media_object,watch_region:str='DE'):
-    providers = tmdb_catch(endpoint,watch_region=watch_region)
+def set_providers(endpoint, media_object, watch_region: str = "DE"):
+    providers = tmdb_catch(endpoint)
     region_providers = providers["results"][watch_region]
-    id_list_flatrate = [provider["flatrate"]["provider_id"] for provider in region_providers]
-    id_list_buy = [provider["buy"]["provider_id"] for provider in region_providers]
-    id_list_rent = [provider["rent"]["provider_id"] for provider in region_providers]
-    media_object.providers_flatrate.set(WatchProvider.objects.filter(provider_id__in=id_list_flatrate))
-    media_object.providers_buy.set(WatchProvider.objects.filter(provider_id__in=id_list_buy))
-    media_object.providers_rent.set(WatchProvider.objects.filter(provider_id__in=id_list_rent))
+
+    if region_providers.get("flatrate"):
+        id_list_flatrate = [
+            provider["provider_id"] for provider in region_providers["flatrate"]
+        ]
+        media_object.providers_flatrate.set(
+            WatchProvider.objects.filter(provider_id__in=id_list_flatrate)
+        )
+
+    if region_providers.get("buy"):
+        id_list_buy = [provider["provider_id"] for provider in region_providers["buy"]]
+        media_object.providers_buy.set(
+            WatchProvider.objects.filter(provider_id__in=id_list_buy)
+        )
+
+    if region_providers.get("rent"):
+        id_list_rent = [
+            provider["provider_id"] for provider in region_providers["rent"]
+        ]
+        media_object.providers_rent.set(
+            WatchProvider.objects.filter(provider_id__in=id_list_rent)
+        )
