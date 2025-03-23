@@ -85,70 +85,136 @@ $(document).ready(_ => {
         .animate({ width: '0em' }, 300)
         .find('button, input')
         .attr('tabindex', -1)
-      $(".dropdown").find(".dropdown-options").addClass("hidden")
+      $('.dropdown').find('.dropdown-options').addClass('hidden')
     }
   })
   //   Hide Field when X is pressed
   $('.sort-container .sort-box button').on('click', event => {
     const sortBox = $(event.currentTarget)
-        .closest('.sort-container')
-        .find('.sort-box')
-        .animate({ width: '0em' }, 300)
-        .find('button, input')
-        .attr('tabindex', -1)
+      .closest('.sort-container')
+      .find('.sort-box')
+      .animate({ width: '0em' }, 300)
+      .find('button, input')
+      .attr('tabindex', -1)
   })
 
   // dropwdown opening
-  const $dropdown = $(".dropdown");
-  const $selected = $dropdown.find(".dropdown-selected");
-  const $options = $dropdown.find(".dropdown-options");
+  const $dropdown = $('.dropdown')
+  const $selected = $dropdown.find('.dropdown-selected')
+  const $options = $dropdown.find('.dropdown-options')
 
   // Append the options to the body
-  $("body").append($options);
+  $('body').append($options)
 
   // Adjust position and show options on click
-  $selected.on("click", (e) => {
-    const rect = $selected[0].getBoundingClientRect();
-    const scrollTop = $(window).scrollTop();
-    const scrollLeft = $(window).scrollLeft();
-    
-    const symbolWidth = $dropdown.closest(".sort-container").find(".symbol")[0].getBoundingClientRect().width
-      $options.css({
-          position: "absolute",
-          top: `${rect.bottom+scrollTop}px`,
-          left: `${rect.left+scrollLeft-symbolWidth}px`,
-          width: `${rect.width+symbolWidth}px`,
-          zIndex: 1000
-      }).removeClass("hidden");
-  });
+  $selected.on('click', e => {
+    const rect = $selected[0].getBoundingClientRect()
+    const scrollTop = $(window).scrollTop()
+    const scrollLeft = $(window).scrollLeft()
+
+    const symbolWidth = $dropdown
+      .closest('.sort-container')
+      .find('.symbol')[0]
+      .getBoundingClientRect().width
+    $options
+      .css({
+        position: 'absolute',
+        top: `${rect.bottom + scrollTop}px`,
+        left: `${rect.left + scrollLeft - symbolWidth}px`,
+        width: `${rect.width + symbolWidth}px`,
+        zIndex: 1000
+      })
+      .removeClass('hidden')
+  })
 
   // Close dropdown on outside click
-  $(document).on("click", (e) => {
-    if (!e.target.closest(".dropdown") && !e.target.closest("button")) {
+  $(document).on('click', e => {
+    if (!e.target.closest('.dropdown') && !e.target.closest('button')) {
       // shrink sort box if dopdow nis already closed
-      if ($options.hasClass("hidden")) {
-        const sortBox = $(".sort .sort-box")
-        .animate({ width: '0em' }, 300)
-        .find('button, input')
-        .attr('tabindex', -1)
-      } else 
-      {// otherwise just close dropdown
-        $options.addClass("hidden");}
-        
+      if ($options.hasClass('hidden')) {
+        const sortBox = $('.sort .sort-box')
+          .animate({ width: '0em' }, 300)
+          .find('button, input')
+          .attr('tabindex', -1)
+      } else {
+        // otherwise just close dropdown
+        $options.addClass('hidden')
+      }
     }
-  });
+  })
 
   /*\
    * ===========
    * Profile Box
    * ===========
   \*/
-  $('.nav .profile>.symbol>button').on("click", event => {
-    $(".profile-box").toggleClass("hidden")
-    $(".bg-shadow#profile_box").toggleClass("hidden")
+  $('.nav .profile>.symbol>button').on('click', event => {
+    $('.profile-box').toggleClass('hidden')
+    $('.bg-shadow#profile_box').toggleClass('hidden')
   })
   $('.bg-shadow#profile_box').on('click', event => {
     $('.profile-box').toggleClass('hidden')
     $(event.currentTarget).addClass('hidden')
   })
+
+  /**
+   * ==============
+   * Popup Media TV
+   * ==============
+   */
+
+  // show watch timeline
+  $('.popup-media-tv .container.head .actions .action.show-timeline').on(
+    'click',
+    e => {
+      const graph = $('.popup-media-tv .container.graph')
+      console.log(graph.height())
+      if (graph.height() == 0) {
+        graph.animate(
+          { height: '10em' },
+          { duration: 250, easing: 'easeOutCubic' }
+        )
+      } else {
+        graph.animate(
+          { height: '0em' },
+          { duration: 250, easing: 'easeOutCubic' }
+        )
+      }
+    }
+  )
+
+  // show/collapse episodes
+
+  $('.popup-media-tv .container.body .season .head .actions .show-episodes').on(
+    'click',
+    e => {
+      const episode_container = $(e.currentTarget)
+        .closest('.season')
+        .find('.episodes')
+      const arrow = $(e.currentTarget).find("svg")
+      if (episode_container.hasClass('hidden')) {
+        $({deg:0}).animate(
+          {
+            deg: -90,
+          },
+        {
+          duration: 250, queue: true, easing: 'easeOutCubic', step: now => {
+            arrow.css("transform","rotate("+now+"deg)")
+          }}
+        )
+        episode_container.removeClass('hidden')
+      } else {
+        $({deg:-90}).animate(
+          {
+            deg: 0,
+          },
+        {
+          duration: 250, queue: true, easing: 'easeOutCubic', step: now => {
+            arrow.css("transform","rotate("+now+"deg)")
+          }}
+        )
+        episode_container.addClass('hidden')
+      }
+    }
+  )
 })

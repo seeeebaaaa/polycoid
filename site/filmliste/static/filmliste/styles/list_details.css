@@ -266,12 +266,22 @@ input[type='text'] {
   align-items: center; */
 }
 
-.nav .search-for-media .query-result-container .query-set .query-item:hover .title{
+.nav
+  .search-for-media
+  .query-result-container
+  .query-set
+  .query-item:hover
+  .title {
   color: var(--c-txt-scnd);
   z-index: 0;
 }
 
-.nav .search-for-media .query-result-container .query-set .query-item:hover .img{
+.nav
+  .search-for-media
+  .query-result-container
+  .query-set
+  .query-item:hover
+  .img {
   filter: brightness(66%);
   z-index: 0;
 }
@@ -299,7 +309,7 @@ input[type='text'] {
   justify-content: start;
 }
 
-.nav .search-for-media .query-result-container>span {
+.nav .search-for-media .query-result-container > span {
   position: sticky;
   font-size: 1.3em;
   font-weight: bolder;
@@ -747,19 +757,479 @@ body .bg-shadow {
  * ==============
  *
 \*/
-.popup-media-tv {
+.popup-container.media-tv {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0px;
+  left: 0px;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.673);
   z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+  padding-top: 5em;
+  padding-bottom: 5em;
+}
+
+.popup-media-tv {
+  /* position: fixed;
+  top: 50%;
+  left: 50%; */
+  /* transform: translate(-50%, -50%); */
   background: var(--c-bg);
   max-width: 80vw;
   width: 60em;
-  max-height: 40em;
   font-size: 1.1em;
   padding: 1em;
+  border-radius: var(--b-corner);
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+/* 
+  HEAd
+*/
+
+.popup-media-tv > .container.head {
+  width: 100%;
+  aspect-ratio: 16/9;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  position: relative;
+}
+
+.popup-media-tv > .container.head .bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  border-top-left-radius: var(--b-corner);
+  border-top-right-radius: var(--b-corner);
+}
+
+.popup-media-tv > .container.head > .close {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  z-index: 3;
+}
+.popup-media-tv > .container.head > .close svg {
+  width: 2em;
+  height: 2em;
+  margin: auto;
+}
+
+.popup-media-tv > .container.head > .close svg * {
+  stroke: var(--c-txt);
+  stroke-width: var(--symbol-width);
+}
+
+.popup-media-tv > .container.head .subbar {
+  display: flex;
+  align-items: end;
+  z-index: 1;
+  min-height: 5em;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, var(--c-bg) 50%);
+}
+
+.popup-media-tv > .container.head .subbar .title {
+  color: var(--c-txt);
+  max-width: 20em;
+  font-weight: bold;
+  font-size: 2.3em;
+}
+
+.popup-media-tv > .container.head .subbar .actions {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+  gap: 0.5em;
+  margin-right: 0.5em;
+  margin-left: 0.5em;
+  margin-bottom: 0.4em;
+}
+
+.popup-media-tv > .container.head .subbar .actions .action {
+  width: 1.7em;
+  height: 1.7em;
+  background-color: var(--c-txt);
   border-radius: var(--b-corner);
+  color: var(--c-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-media-tv > .container.head .subbar .actions .action:hover {
+  background-color: var(--c-txt-scnd);
+}
+
+.popup-media-tv > .container.head .subbar .actions .action svg {
+  width: 100%;
+  height: 100%;
+}
+
+.popup-media-tv > .container.head .subbar .actions .action svg * {
+  stroke: var(--c-bg);
+  stroke-width: var(--symbol-width);
+}
+
+/* 
+  GRAPH
+*/
+
+.popup-media-tv > .container.graph {
+  height: 0em;
+  background-color: var(--c-bg);
+  border: 1px solid var(--c-txt);
+  border-radius: var(--b-corner);
+  overflow: hidden;
+  position: relative;
+  margin-top: 1em;
+}
+
+.popup-media-tv > .container.graph .timeline {
+  min-height: 10em;
+  min-width: 100%;
+  overflow-x: scroll;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.popup-media-tv > .container.graph .timeline .snippet {
+  min-height: 10em;
+  min-width: 4em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.popup-media-tv > .container.graph .timeline .snippet .users {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  width: 3em;
+  max-height: 4em;
+  transform: translateX(-50%) translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.1em;
+  row-gap: 0.1em;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.popup-media-tv > .container.graph .timeline .snippet .users .user {
+  width: 1em;
+  height: 1em;
+  background-color: #90dc6e;
+  position: relative;
+  border-radius: var(--b-corner);
+}
+
+.popup-media-tv > .container.graph .timeline .snippet .users .user .season {
+  font-size: 0.4em;
+  position: absolute;
+  top: 0.2em;
+  left: 0.2em;
+  height: 1em;
+  width: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-media-tv > .container.graph .timeline .snippet .users .user .episode {
+  font-size: 0.4em;
+  position: absolute;
+  bottom: 0.2em;
+  right: 0.2em;
+  height: 1em;
+  width: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-media-tv > .container.graph .timeline .snippet .users .indicator {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%) translateY(90%);
+  width: 1px;
+  height: 1em;
+  background-image: linear-gradient(var(--c-txt) 80%, rgba(255,255,255,0) 0%);
+  background-position: 50%;
+  background-size: 8px 6px;
+  background-repeat: repeat-y;
+}
+
+.popup-media-tv > .container.graph .timeline .snippet .line {
+  height: 1px;
+  width: 100%;
+  /* dotted line */
+  background-image: linear-gradient(to right, var(--c-txt) 50%, rgba(255,255,255,0) 0%);
+  background-position: 50%;
+  background-size: 8px 1px;
+  background-repeat: repeat-x;
+}
+
+.popup-media-tv > .container.graph .timeline .snippet .date {
+  position: absolute;
+  bottom: 40%;
+  width: 100%;
+  color: var(--c-txt);
+  font-size: 0.5em;
+  text-align: center;
+}
+
+.popup-media-tv > .container.graph .legend {
+  position: absolute;
+  left: 0.5em;
+  bottom: 0.5em;
+  max-width: 100%;
+  display: flex;
+  gap: 0.5em;
+}
+
+.popup-media-tv > .container.graph .legend .user {
+  background-color: #90dc6e;
+  color: var(--c-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1em;
+  border-radius: var(--b-corner);
+  font-size: 0.6em;
+  font-weight: bolder;
+}
+
+/* 
+  OVERVIEW
+*/
+
+.popup-media-tv > .container.overview {
+  background-color: var(--c-bg);
+  color: var(--c-txt);
+  padding: 1em 0em;
+}
+
+/* 
+  BODY
+*/
+
+.popup-media-tv > .container.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 
+  Seasons
+*/
+
+.popup-media-tv > .container.body .season {
+  min-height: 3em;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-top: 2px solid var(--c-txt);
+}
+
+.popup-media-tv > .container.body .season .head {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  height: 4em;
+  background-color: var(--c-bg);
+}
+
+.popup-media-tv > .container.body .season .head .image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  min-width: 6em;
+}
+
+.popup-media-tv > .container.body .season .head .image img {
+  max-height: 3.5em;
+  max-width: 5em;
+  border-radius: var(--b-corner);
+}
+
+.popup-media-tv > .container.body .season .head .info {
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-media-tv > .container.body .season .head .title {
+  color: var(--c-txt);
+}
+
+.popup-media-tv > .container.body .season .head .description {
+  font-size: 0.5em;
+  color: var(--c-txt);
+}
+
+.popup-media-tv > .container.body .season .head .actions {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  margin-left: 0.5em;
+  min-width: 6em;
+}
+
+.popup-media-tv > .container.body .season .head .actions .show-episodes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-media-tv > .container.body .season .head .actions .show-episodes svg {
+  height: 2em;
+}
+.popup-media-tv > .container.body .season .head .actions .show-episodes svg * {
+  stroke: var(--c-txt);
+  stroke-width: var(--symbol-width);
+}
+
+.popup-media-tv
+  > .container.body
+  .season
+  .head
+  .actions
+  .show-episodes:hover
+  svg
+  * {
+  stroke: var(--c-txt-scnd);
+}
+
+/* 
+  Episodes
+*/
+
+.popup-media-tv > .container.body .season .episodes {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.popup-media-tv > .container.body .season .episodes .episode {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  height: 4em;
+  background-color: var(--c-bg);
+}
+.popup-media-tv > .container.body .season .episodes .episode .image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  min-width: 6em;
+}
+
+.popup-media-tv > .container.body .season .episodes .episode .image img {
+  max-height: 3.5em;
+  max-width: 5em;
+  border-radius: var(--b-corner);
+}
+
+.popup-media-tv > .container.body .season .episodes .episode .info {
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-media-tv > .container.body .season .episodes .episode .title {
+  color: var(--c-txt);
+}
+
+.popup-media-tv > .container.body .season .episodes .episode .description {
+  font-size: 0.5em;
+  color: var(--c-txt);
+}
+
+.popup-media-tv > .container.body .season .episodes .episode .actions {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  margin-left: 0.5em;
+  padding-right: 0.5em;
+  gap: 0.5em;
+  min-width: 6em;
+}
+
+.popup-media-tv > .container.body .season .episodes .episode .actions .action {
+  width: 1.3em;
+  height: 1.3em;
+  aspect-ratio: 1/1;
+  background-color: var(--c-txt);
+  border-radius: var(--b-corner);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-media-tv
+  > .container.body
+  .season
+  .episodes
+  .episode
+  .actions
+  .action
+  svg {
+  width: 100%;
+  height: 100%;
+}
+
+.popup-media-tv
+  > .container.body
+  .season
+  .episodes
+  .episode
+  .actions
+  .action
+  svg
+  * {
+  stroke: var(--c-bg);
+  stroke-width: var(--symbol-width);
+}
+
+.popup-media-tv
+  > .container.body
+  .season
+  .episodes
+  .episode
+  .actions
+  .action:hover {
+  background-color: var(--c-txt-scnd);
+}
+
+.popup-media-tv
+  > .container.body
+  .season
+  .episodes
+  .episode
+  .actions
+  .action
+  * {
+  font-size: 0.75em;
 }

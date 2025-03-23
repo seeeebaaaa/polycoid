@@ -109,7 +109,9 @@ def get_details_title(request: Request):
     # TODO: try/catch for tmdb query if id not exisitng (404 error)
     if media_type == "movie":
         movie = movie_get_or_create(media_id)
-
+        # in case an error occured
+        if isinstance(movie,Response):
+            return movie
         # check if titles match
         if not movie.title == media_title:
             print(movie.title, media_title)
@@ -128,6 +130,7 @@ def get_details_title(request: Request):
         else:
             req_series = tmdb.TV(id=media_id)
             info = tmdb_catch(req_series.info)
+            print(info)
             if not info:
                 return Response({"error": "Invalid TV ID"}, status=404)
 
@@ -153,8 +156,7 @@ def get_details_title(request: Request):
             tv_series.genres.set(genres)
 
             # set providers
-            set_providers(req_series.watch_providers, tv_series, watch_region="DE")
-
+            set_providers(req_series, tv_series, watch_region="DE")
             # save genre and provider changes
             tv_series.save()
 
@@ -228,6 +230,9 @@ def get_details_collection(request: Request):
             if not part["media_type"] == "movie":
                 return Response({"error": "TV Collections are not supported."})
             movie = movie_get_or_create(part["id"], create_collection=False)
+            # in case an error occured
+            if isinstance(movie,Response):
+                return movie
             movie.belongs_to_collection = collection
             movie.save()
 

@@ -18,6 +18,8 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./.env
+    expose:
+      -  5432
     environment:
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
@@ -33,3 +35,57 @@ services:
 
 volumes:
   postgres_data:
+
+
+# services:
+# django:
+#   image: ghcr.io/seeeebaaaa/polycoid-django:latest
+#   container_name: django
+#   hostname: django
+#   restart: unless-stopped
+#   env_file:
+#     - ./.env
+#   depends_on:
+#     - postgres_db
+#   expose:
+#     - 8000
+#   command: gunicorn polycoid_main.wsgi:application --bind 0.0.0.0:8000
+#   healthcheck:
+#     test: ["CMD", "curl", "-f", "http://0.0.0.0:8000/"]
+#     interval: 10s
+#     timeout: 5s
+#     retries: 5
+#   volumes:
+#     - staticfiles:/home/site/django/staticfiles  # Mount shared volume
+#     - ./logs/django:/var/log/django  # Mount for Django logs
+
+# polycoid-nginx:
+#   image: ghcr.io/seeeebaaaa/polycoid-nginx:latest
+#   container_name: nginx
+#   restart: unless-stopped
+#   ports:
+#     - "80:80"
+#     - "443:443"
+#   depends_on:
+#     django:
+#       condition: service_healthy
+#   volumes:
+#     - staticfiles:/home/site/django/staticfiles  # Mount shared volume
+#     - ./logs/nginx:/var/log/nginx  # Mount for Nginx logs
+
+# postgres_db:
+#   image: postgres
+#   container_name: postgres
+#   restart: unless-stopped
+#   volumes:
+#     - postgres_data:/var/lib/postgresql/data/
+#   env_file:
+#     - ./.env
+#   environment:
+#     - POSTGRES_USER=${DATABASE_USER}
+#     - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+#     - POSTGRES_DB=${DATABASE_NAME}
+
+# volumes:
+# postgres_data:
+# staticfiles:

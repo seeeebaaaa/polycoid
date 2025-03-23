@@ -11,6 +11,7 @@ def tmdb_catch(endpoint, **kwargs):
         result = endpoint(**kwargs)
         return result
     except HTTPError as e:
+        print(e)
         return None
 
 
@@ -91,9 +92,14 @@ def movie_get_or_create(movie_id: int, create_collection: bool = True):
     return movie
 
 
-def set_providers(endpoint, media_object, watch_region: str = "DE"):
-    providers = tmdb_catch(endpoint)
-    region_providers = providers["results"][watch_region]
+def set_providers(tmdb_TV_obj:tmdb.TV, media_object, watch_region: str = "DE"):
+    tmdb_catch(tmdb_TV_obj.watch_providers)
+    # because theres a bug in the tmdb package, it doesnt return the result as usual, but instead writes it to obj.results
+    if tmdb_TV_obj.results and watch_region in tmdb_TV_obj.results.keys():
+        region_providers = tmdb_TV_obj.results[watch_region]
+    else:
+        # no providers for region found
+        return
 
     if region_providers.get("flatrate"):
         id_list_flatrate = [
